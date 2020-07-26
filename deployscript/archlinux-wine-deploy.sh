@@ -99,8 +99,8 @@ xdotool key --window $WID --delay 500 Tab space
 # Wine Gecko ------------
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
-	xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step2_gecko2.png
 done
+xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step3_gecko.png
 echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 500 Tab space
 #-----------------------
@@ -109,7 +109,7 @@ xdotool key --window $WID --delay 500 Tab space
 #while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 #	sleep 2
 #done
-#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step1_mono2.png
+#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step4_mono.png
 #echo "Sending installer keystrokes..." >&2
 #xdotool key --window $WID --delay 500 Tab space
 #-----------------------
@@ -117,7 +117,7 @@ xdotool key --window $WID --delay 500 Tab space
 
 sleep 7
 ps ux | grep wine
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step3_end.png
+xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step5_end.png
 
 #wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 #chmod +x ./winetricks

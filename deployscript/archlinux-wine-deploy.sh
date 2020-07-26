@@ -61,13 +61,16 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd fluxbox
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
 Xvfb_PID=$!
-sleep 14
+sleep 7
 export DISPLAY=:77
+startfluxbox &
+FLUXBOX_PID=$!
+sleep 7
 #--------
 
 export WINEARCH=win64
@@ -111,7 +114,7 @@ xdotool key --window $WID --delay 500 Tab space
 
 sleep 7
 ps ux | grep wine
-xwd -display :77 -root -silent | convert xwd:- png:${WINE64BOTTLE}/screenshot_step1.png
+xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step1.png
 
 #wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 #chmod +x ./winetricks
@@ -132,10 +135,12 @@ xwd -display :77 -root -silent | convert xwd:- png:${WINE64BOTTLE}/screenshot_st
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
+kill -9 "${FLUXBOX_PID}"
 kill -9 "${Xvfb_PID}"
 #---------------
 
-tar czf wine64bottle.tar.gz "${WINE64BOTTLE}"
+#tar czf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
+tar czf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

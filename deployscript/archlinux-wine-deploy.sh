@@ -84,7 +84,8 @@ while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 done
 xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step1_mono.png
 echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
+xdotool key --window $WID --delay 2000 Tab space
+sleep 7
 #-----------------------
 
 # Wine Gecko ------------
@@ -93,25 +94,28 @@ while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 done
 xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step2_gecko.png
 echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
-#-----------------------
-
-# Wine Gecko ------------
-while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
-	sleep 2
-done
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step3_gecko.png
-echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
+xdotool key --window $WID --delay 2000 Tab space
+sleep 7
 #-----------------------
 
 ## Wine Mono ------------
 #while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 #	sleep 2
 #done
-#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step4_mono.png
+#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step3_mono.png
 #echo "Sending installer keystrokes..." >&2
-#xdotool key --window $WID --delay 500 Tab space
+#xdotool key --window $WID --delay 2000 Tab space
+#sleep 7
+#-----------------------
+
+# Wine Gecko ------------
+#while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+#	sleep 2
+#done
+#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step4_gecko.png
+#echo "Sending installer keystrokes..." >&2
+#xdotool key --window $WID --delay 2000 Tab space
+#sleep 7
 #-----------------------
 
 

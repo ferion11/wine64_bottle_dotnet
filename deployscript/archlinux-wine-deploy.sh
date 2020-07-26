@@ -150,14 +150,15 @@ chmod +x ./winetricks
 #) &
 #SLEEP_PID=$!
 
-env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
+./winetricks -q dotnet48
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
-tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
+touch wine64bottle.tar.gz
+#tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
 #tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz

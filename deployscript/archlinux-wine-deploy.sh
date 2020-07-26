@@ -141,8 +141,8 @@ xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_stepX.png
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
-kill -9 "${VIDEO_PID}"
-kill -9 "${Xvfb_PID}"
+kill -15 "${VIDEO_PID}"
+kill -15 "${Xvfb_PID}"
 #---------------
 
 #tar czf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*

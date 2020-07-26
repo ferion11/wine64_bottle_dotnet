@@ -69,7 +69,7 @@ Xvfb_PID=$!
 sleep 7
 export DISPLAY=:77
 sleep 7
-ffmpeg -y -s 1024x768 -r 24 -f x11grab -i :77.0 /tmp/video.mp4 &
+ffmpeg -nostdin -y -s 1024x768 -r 24 -f x11grab -i :77.0 /tmp/video.mp4 > /dev/null &
 VIDEO_PID=$!
 sleep 7
 #--------

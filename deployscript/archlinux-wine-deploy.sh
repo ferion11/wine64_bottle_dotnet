@@ -101,12 +101,12 @@ echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 500 Tab space
 #-----------------------
 
-# Wine Gecko ------------
-while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
-	sleep 2
-done
-echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
+## Wine Gecko ------------
+#while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+#	sleep 2
+#done
+#echo "Sending installer keystrokes..." >&2
+#xdotool key --window $WID --delay 500 Tab space
 #-----------------------
 
 sleep 7

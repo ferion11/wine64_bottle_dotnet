@@ -61,7 +61,7 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
@@ -94,11 +94,11 @@ xdotool key --window $WID --delay 500 Tab space
 #-----------------------
 
 # Wine Mono ------------
-while ! WID=$(xdotool search --name "Wine Mono Installer"); do
-	sleep 2
-done
-echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
+#while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+#	sleep 2
+#done
+#echo "Sending installer keystrokes..." >&2
+#xdotool key --window $WID --delay 500 Tab space
 #-----------------------
 
 ## Wine Gecko ------------
@@ -111,26 +111,27 @@ xdotool key --window $WID --delay 500 Tab space
 
 sleep 7
 ps ux | grep wine
+xwd -display :77 -root -silent | convert xwd:- png:${WINE64BOTTLE}/screenshot_step1.png
 
-wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
-chmod +x ./winetricks
+#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+#chmod +x ./winetricks
 
-(
+#(
 ## sleep in bash for loop feedback - starting after 2min ##
-sleep 120
-for i in {1..60}
-do
-	sleep 60
-	echo "------- $i min ------- "
-	ps ux | grep wine
-done
-) &
-SLEEP_PID=$!
+#sleep 120
+#for i in {1..60}
+#do
+#	sleep 60
+#	echo "------- $i min ------- "
+#	ps ux | grep wine
+#done
+#) &
+#SLEEP_PID=$!
 
-env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
+#env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
 
 # kill Xvfb whenever you feel like it
-kill -9 "${SLEEP_PID}"
+#kill -9 "${SLEEP_PID}"
 kill -9 "${Xvfb_PID}"
 #---------------
 

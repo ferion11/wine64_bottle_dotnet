@@ -61,7 +61,7 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 wine-staging xorg-server-xvfb xdotool
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 wine xorg-server-xvfb xdotool
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &

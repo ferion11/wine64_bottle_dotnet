@@ -95,9 +95,22 @@ xdotool key --window $WID --delay 500 Tab space
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 chmod +x ./winetricks
 
+(
+## sleep in bash for loop feedback ##
+for i in {1..30}
+do
+	MIN_TIME=$(($i*60))
+	sleep ${MIN_TIME}
+	echo "------- $i min ------- "
+	ps ux | grep wine
+done
+) &
+SLEEP_PID=$!
+
 env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
 
 # kill Xvfb whenever you feel like it
+kill -9 "${SLEEP_PID}"
 kill -9 "${Xvfb_PID}"
 #---------------
 

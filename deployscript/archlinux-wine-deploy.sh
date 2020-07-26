@@ -66,7 +66,7 @@ pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
 Xvfb_PID=$!
-sleep 7
+sleep 14
 export DISPLAY=:77
 #--------
 
@@ -89,8 +89,9 @@ while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
 echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space
+xdotool key --window $WID --delay 500 Tab space Return Return
 #-----------------------
+sleep 14
 
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 chmod +x ./winetricks
@@ -98,7 +99,7 @@ chmod +x ./winetricks
 (
 ## sleep in bash for loop feedback - starting after 2min ##
 sleep 120
-for i in {1..30}
+for i in {1..60}
 do
 	sleep 60
 	echo "------- $i min ------- "

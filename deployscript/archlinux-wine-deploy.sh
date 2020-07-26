@@ -76,6 +76,7 @@ mkdir "${WINE64BOTTLE}"
 WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &
 echo "Waiting to initialize..."
 
+# 2 times, one for 32bit and another for 64bit
 # Wine Mono ------------
 while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 	sleep 2
@@ -84,14 +85,31 @@ echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 500 Tab space
 #-----------------------
 
-# Wine Mono ------------
+# Wine Gecko ------------
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
 echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 500 Tab space Return Return
+xdotool key --window $WID --delay 500 Tab space
 #-----------------------
-sleep 14
+
+# Wine Mono ------------
+while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+	sleep 2
+done
+echo "Sending installer keystrokes..." >&2
+xdotool key --window $WID --delay 500 Tab space
+#-----------------------
+
+# Wine Gecko ------------
+while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+	sleep 2
+done
+echo "Sending installer keystrokes..." >&2
+xdotool key --window $WID --delay 500 Tab space
+#-----------------------
+
+sleep 7
 ps ux | grep wine
 
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks

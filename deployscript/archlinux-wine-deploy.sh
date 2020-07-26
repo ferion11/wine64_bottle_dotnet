@@ -90,14 +90,14 @@ echo "* Waiting to initialize wine..."
 while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 	sleep 2
 done
-printscreen
+#printscreen
 echo "Sending installer keystrokes..."
 xdotool key --window $WID --delay 2000 Tab
 sleep 2
-printscreen
+#printscreen
 xdotool key --window $WID --delay 2000 space
 sleep 2
-printscreen
+#printscreen
 sleep 5
 #-----------------------
 
@@ -105,14 +105,14 @@ sleep 5
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
-printscreen
+#printscreen
 echo "Sending installer keystrokes..."
 xdotool key --window $WID --delay 2000 Tab
 sleep 2
-printscreen
+#printscreen
 xdotool key --window $WID --delay 2000 space
 sleep 2
-printscreen
+#printscreen
 sleep 5
 #-----------------------
 
@@ -120,23 +120,23 @@ sleep 5
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
-printscreen
+#printscreen
 echo "Sending installer keystrokes..."
 xdotool key --window $WID --delay 2000 Tab
 sleep 2
-printscreen
+#printscreen
 xdotool key --window $WID --delay 2000 space
 sleep 2
-printscreen
+#printscreen
 sleep 5
 #-----------------------
 
 sleep 14
 ps ux | grep wine
-printscreen
+#printscreen
 
-#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
-#chmod +x ./winetricks
+wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+chmod +x ./winetricks
 
 #(
 ## sleep in bash for loop feedback - starting after 2min ##
@@ -150,15 +150,15 @@ printscreen
 #) &
 #SLEEP_PID=$!
 
-#env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
+env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
-#tar czf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-tar czf wine64bottle.tar.gz /tmp/screenshot*
+tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
+#tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

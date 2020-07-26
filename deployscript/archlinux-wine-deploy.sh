@@ -70,6 +70,8 @@ sleep 7
 export DISPLAY=:77
 #--------
 
+export WINEARCH=win64
+export WINEPREFIX="${WINE64BOTTLE}"
 mkdir "${WINE64BOTTLE}"
 WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &
 echo "Waiting to initialize..."

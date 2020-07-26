@@ -61,13 +61,16 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd ffmpeg x264
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
 Xvfb_PID=$!
 sleep 7
 export DISPLAY=:77
+sleep 7
+ffmpeg -y -s 1024x768 -r 24 -f x11grab -i :77.0 /tmp/video.mp4 &
+VIDEO_PID=$!
 sleep 7
 #--------
 
@@ -82,7 +85,6 @@ echo "Waiting to initialize..."
 while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 	sleep 2
 done
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step1_mono.png
 echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 2000 Tab space
 sleep 7
@@ -92,7 +94,6 @@ sleep 7
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step2_gecko.png
 echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 2000 Tab space
 sleep 7
@@ -102,7 +103,6 @@ sleep 7
 #while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 #	sleep 2
 #done
-#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step3_mono.png
 #echo "Sending installer keystrokes..." >&2
 #xdotool key --window $WID --delay 2000 Tab space
 #sleep 7
@@ -112,7 +112,6 @@ sleep 7
 #while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 #	sleep 2
 #done
-#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step4_gecko.png
 #echo "Sending installer keystrokes..." >&2
 #xdotool key --window $WID --delay 2000 Tab space
 #sleep 7
@@ -121,7 +120,7 @@ sleep 7
 
 sleep 7
 ps ux | grep wine
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step5_end.png
+xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_stepX.png
 
 #wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 #chmod +x ./winetricks
@@ -142,11 +141,12 @@ xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_step5_end.png
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
+kill -9 "${VIDEO_PID}"
 kill -9 "${Xvfb_PID}"
 #---------------
 
 #tar czf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-tar czf wine64bottle.tar.gz /tmp/screenshot*
+tar czf wine64bottle.tar.gz /tmp/screenshot* /tmp/video.mp4
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

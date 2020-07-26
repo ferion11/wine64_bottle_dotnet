@@ -61,7 +61,7 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 wine xorg-server-xvfb xdotool
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 xorg-server-xvfb xdotool
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
@@ -96,7 +96,8 @@ wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winet
 chmod +x ./winetricks
 
 (
-## sleep in bash for loop feedback ##
+## sleep in bash for loop feedback - starting after 2min ##
+sleep 120
 for i in {1..30}
 do
 	MIN_TIME=$(($i*60))

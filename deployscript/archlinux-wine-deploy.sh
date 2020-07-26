@@ -3,6 +3,12 @@ export WINE64BOTTLE="/tmp/wine64bottle"
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
+
+PRINT_NUM=1
+printscreen() {
+	xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_${PRINT_NUM}.png
+	PRINT_NUM=$((PRINT_NUM+1))
+}
 #=========================
 
 #Initializing the keyring requires entropy
@@ -61,49 +67,60 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd ffmpeg x264
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
 Xvfb_PID=$!
 sleep 7
+echo "* exporting the DISPLAY:"
 export DISPLAY=:77
-sleep 7
-ffmpeg -nostdin -y -s 1024x768 -r 24 -f x11grab -i :77.0 /tmp/video.mp4 > /dev/null &
-VIDEO_PID=$!
 sleep 7
 #--------
 
+echo "* exporting wine var and creating bottle"
 export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
 mkdir "${WINE64BOTTLE}"
 WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &
-echo "Waiting to initialize..."
+echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit
 # Wine Mono ------------
 while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 	sleep 2
 done
-echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 2000 Tab space
-sleep 7
+printscreen
+echo "Sending installer keystrokes..."
+xdotool key --window $WID --delay 2000 Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+printscreen
+sleep 5
 #-----------------------
 
 # Wine Gecko ------------
 while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 	sleep 2
 done
-echo "Sending installer keystrokes..." >&2
-xdotool key --window $WID --delay 2000 Tab space
-sleep 7
+printscreen
+echo "Sending installer keystrokes..."
+xdotool key --window $WID --delay 2000 Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+printscreen
+sleep 5
 #-----------------------
 
 ## Wine Mono ------------
 #while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 #	sleep 2
 #done
-#echo "Sending installer keystrokes..." >&2
+#echo "Sending installer keystrokes..."
 #xdotool key --window $WID --delay 2000 Tab space
 #sleep 7
 #-----------------------
@@ -112,7 +129,7 @@ sleep 7
 #while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 #	sleep 2
 #done
-#echo "Sending installer keystrokes..." >&2
+#echo "Sending installer keystrokes..."
 #xdotool key --window $WID --delay 2000 Tab space
 #sleep 7
 #-----------------------
@@ -120,7 +137,7 @@ sleep 7
 
 sleep 7
 ps ux | grep wine
-xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_stepX.png
+printscreen
 
 #wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 #chmod +x ./winetricks
@@ -141,12 +158,11 @@ xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_stepX.png
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
-kill -15 "${VIDEO_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
 #tar czf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-tar czf wine64bottle.tar.gz /tmp/screenshot* /tmp/video.mp4
+tar czf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

@@ -92,6 +92,7 @@ echo "Sending installer keystrokes..." >&2
 xdotool key --window $WID --delay 500 Tab space Return Return
 #-----------------------
 sleep 14
+ps ux | grep wine
 
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 chmod +x ./winetricks

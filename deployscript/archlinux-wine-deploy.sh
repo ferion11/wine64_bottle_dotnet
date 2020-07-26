@@ -100,8 +100,7 @@ chmod +x ./winetricks
 sleep 120
 for i in {1..30}
 do
-	MIN_TIME=$(($i*60))
-	sleep ${MIN_TIME}
+	sleep 60
 	echo "------- $i min ------- "
 	ps ux | grep wine
 done

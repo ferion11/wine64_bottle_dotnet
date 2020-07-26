@@ -61,16 +61,43 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 wine-staging
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 wine-staging xorg-server-xvfb xdotool
 #===========================================================================================
+echo "======= DEBUG: Starting xvfb ======="
+Xvfb :77 -screen 0 1024x768x24 &
+Xvfb_PID=$!
+sleep 7
+export DISPLAY=:77
+#--------
 
 mkdir "${WINE64BOTTLE}"
-WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot
+WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &
+echo "Waiting to initialize..."
+
+# Wine Mono ------------
+while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+	sleep 2
+done
+echo "Sending installer keystrokes..." >&2
+xdotool key --window $WID --delay 500 Tab space
+#-----------------------
+
+# Wine Mono ------------
+while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+	sleep 2
+done
+echo "Sending installer keystrokes..." >&2
+xdotool key --window $WID --delay 500 Tab space
+#-----------------------
 
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 chmod +x ./winetricks
 
 env WINEPREFIX="${WINE64BOTTLE}" sh ./winetricks -q dotnet48
+
+# kill Xvfb whenever you feel like it
+kill -9 "${Xvfb_PID}"
+#---------------
 
 tar czf wine64bottle.tar.gz "${WINE64BOTTLE}"
 

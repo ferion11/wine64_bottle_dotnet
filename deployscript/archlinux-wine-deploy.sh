@@ -151,8 +151,10 @@ chmod +x ./winetricks
 #) &
 #SLEEP_PID=$!
 
-./winetricks dotnet48 &
+./winetricks -c dotnet48
+#./winetricks dotnet48 &
 
+handle_gui_winetricks_dotnet48() {
 # Wine dotnet40 ------------
 sleep 21
 while ! WID=$(xdotool search --name "Unnamed"); do
@@ -227,6 +229,8 @@ done
 printscreen
 xdotool key --window $WID --delay 2000 space
 sleep 28
+}
+#handle_gui_winetricks_dotnet48
 #-----------------------
 
 # kill Xvfb whenever you feel like it

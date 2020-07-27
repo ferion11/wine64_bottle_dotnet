@@ -117,7 +117,7 @@ close_wine_gecko_init_windows() {
 	printscreen
 }
 close_wine_gecko_init_windows
-#close_wine_gecko_init_windows
+close_wine_gecko_init_windows
 
 # This will kill all running wine processes in prefix=$WINEPREFIX
 #wineserver -k
@@ -125,7 +125,7 @@ close_wine_gecko_init_windows
 # This will hang until all wine processes in prefix=$WINEPREFIX
 #wineserver -w
 
-sleep 120 && printscreen
+sleep 60 && printscreen
 ps ux | grep wine
 
 giving_time_1m_step() {
@@ -228,7 +228,7 @@ handle_gui_winetricks_dotnet48() {
 #-----------------------
 
 # This will hang until all wine processes in prefix=$WINEPREFIX
-wineserver -w
+#wineserver -w
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"

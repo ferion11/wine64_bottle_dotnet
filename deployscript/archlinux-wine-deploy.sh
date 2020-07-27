@@ -67,7 +67,7 @@ echo "DEBUG: pacmam updating system"
 pacman -Syu --noconfirm
 
 #Add "base-devel multilib-devel" for compile in the list:
-pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine-staging mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
+pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine wine-gecko wine-mono wine-nine mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
 #===========================================================================================
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
@@ -101,7 +101,7 @@ close_wine_mono_init_windows() {
 	#printscreen
 	sleep 7
 }
-close_wine_mono_init_windows
+#close_wine_mono_init_windows
 
 close_wine_gecko_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
@@ -116,8 +116,8 @@ close_wine_gecko_init_windows() {
 	sleep 14
 	#printscreen
 }
-close_wine_gecko_init_windows
-close_wine_gecko_init_windows
+#close_wine_gecko_init_windows
+#close_wine_gecko_init_windows
 
 # This will kill all running wine processes in prefix=$WINEPREFIX
 #wineserver -k

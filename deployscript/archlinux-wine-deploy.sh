@@ -91,14 +91,14 @@ close_wine_mono_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 		sleep 2
 	done
-	printscreen
+	#printscreen
 	echo "Sending installer keystrokes..."
 	xdotool key --window $WID --delay 2000 Tab
 	sleep 2
-	printscreen
+	#printscreen
 	xdotool key --window $WID --delay 2000 space
 	sleep 2
-	printscreen
+	#printscreen
 	sleep 7
 }
 close_wine_mono_init_windows
@@ -111,10 +111,10 @@ close_wine_gecko_init_windows() {
 #	echo "Sending installer keystrokes..."
 #	xdotool key --window $WID --delay 2000 Tab
 #	sleep 2
-	printscreen
+	#printscreen
 	xdotool key --window $WID --delay 2000 space
 	sleep 14
-	printscreen
+	#printscreen
 }
 close_wine_gecko_init_windows
 close_wine_gecko_init_windows
@@ -123,9 +123,10 @@ close_wine_gecko_init_windows
 #wineserver -k
 
 # This will hang until all wine processes in prefix=$WINEPREFIX
-#wineserver -w
+wineserver -w
 
-sleep 60 && printscreen
+# Alternative to test only
+#sleep 60 && printscreen
 ps ux | grep wine
 
 giving_time_1m_step() {
@@ -147,7 +148,7 @@ install_dotnet_from_winetricks() {
 	./winetricks -c dotnet48
 	#./winetricks dotnet48 &
 }
-#install_dotnet_from_winetricks
+install_dotnet_from_winetricks
 
 handle_gui_winetricks_dotnet48() {
 	# Wine dotnet40 ------------
@@ -228,15 +229,18 @@ handle_gui_winetricks_dotnet48() {
 #-----------------------
 
 # This will hang until all wine processes in prefix=$WINEPREFIX
-#wineserver -w
+wineserver -w
+
+#kill -9 "${SLEEP_PID}"
+#killall -9 sleep
 
 # kill Xvfb whenever you feel like it
-#kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
+tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
 #tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-tar cvzf wine64bottle.tar.gz /tmp/screenshot*
+#tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

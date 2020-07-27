@@ -1,5 +1,5 @@
 #!/bin/bash
-export WINE64BOTTLE="${PWD}/wine64bottle"
+export WINE64BOTTLE="${PWD}/work/wine64bottle"
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
@@ -79,7 +79,7 @@ sleep 7
 #--------
 
 echo "* exporting wine var and creating bottle"
-mkdir "${WINE64BOTTLE}"
+mkdir -p "${WINE64BOTTLE}"
 export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
 WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &

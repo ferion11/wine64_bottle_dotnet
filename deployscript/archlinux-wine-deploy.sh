@@ -80,8 +80,8 @@ sleep 7
 
 echo "* exporting wine var and creating bottle"
 mkdir -p "${WINE64BOTTLE}"
-export WINEARCH=win32
-#export WINEARCH=win64
+#export WINEARCH=win32
+export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
 wineboot &
 echo "* Waiting to initialize wine..."
@@ -91,15 +91,15 @@ close_wine_mono_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 		sleep 2
 	done
-	#printscreen
+	printscreen
 	echo "Sending installer keystrokes..."
 	xdotool key --window $WID --delay 2000 Tab
 	sleep 2
-	#printscreen
+	printscreen
 	xdotool key --window $WID --delay 2000 space
 	sleep 2
-	#printscreen
-	sleep 5
+	printscreen
+	sleep 7
 }
 close_wine_mono_init_windows
 
@@ -107,25 +107,26 @@ close_wine_gecko_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 		sleep 2
 	done
-	#printscreen
-	echo "Sending installer keystrokes..."
-	xdotool key --window $WID --delay 2000 Tab
-	sleep 2
-	#printscreen
+#	printscreen
+#	echo "Sending installer keystrokes..."
+#	xdotool key --window $WID --delay 2000 Tab
+#	sleep 2
+	printscreen
 	xdotool key --window $WID --delay 2000 space
-	sleep 2
-	#printscreen
-	sleep 5
+	sleep 14
+	printscreen
 }
 close_wine_gecko_init_windows
 #close_wine_gecko_init_windows
 
-sleep 14
-ps ux | grep wine
-#printscreen
+# This will kill all running wine processes in prefix=$WINEPREFIX
+#wineserver -k
 
-wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
-chmod +x ./winetricks
+# This will hang until all wine processes in prefix=$WINEPREFIX
+#wineserver -w
+
+sleep 120 && printscreen
+ps ux | grep wine
 
 giving_time_1m_step() {
 	# sleep in bash for loop feedback - starting after 2min ##
@@ -140,8 +141,13 @@ giving_time_1m_step() {
 #( giving_time_1m_step ) &
 #SLEEP_PID=$!
 
-./winetricks -c dotnet48
-#./winetricks dotnet48 &
+install_dotnet_from_winetricks() {
+	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+	chmod +x ./winetricks
+	./winetricks -c dotnet48
+	#./winetricks dotnet48 &
+}
+#install_dotnet_from_winetricks
 
 handle_gui_winetricks_dotnet48() {
 	# Wine dotnet40 ------------
@@ -221,14 +227,16 @@ handle_gui_winetricks_dotnet48() {
 #handle_gui_winetricks_dotnet48
 #-----------------------
 
-sleep 28
+# This will hang until all wine processes in prefix=$WINEPREFIX
+wineserver -w
+
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
-tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-#tar cvzf wine64bottle.tar.gz /tmp/screenshot*
+#tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
+tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

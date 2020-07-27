@@ -82,7 +82,7 @@ echo "* exporting wine var and creating bottle"
 mkdir -p "${WINE64BOTTLE}"
 export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
-WINEPREFIX="${WINE64BOTTLE}" WINEARCH=win64 wineboot &
+wineboot &
 echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit
@@ -150,15 +150,90 @@ chmod +x ./winetricks
 #) &
 #SLEEP_PID=$!
 
-./winetricks -q dotnet48
+./winetricks dotnet48 &
+
+# Wine dotnet40 ------------
+sleep 21
+while ! WID=$(xdotool search --name "Unnamed"); do
+	sleep 2
+done
+printscreen
+echo "Sending dotnet keystrokes..."
+xdotool key --window $WID --delay 2000 Tab Tab Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 Tab Tab Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 120
+printscreen
+sleep 120
+printscreen
+echo "* Waiting more 300s to finish"
+sleep 300
+printscreen
+xdotool key --window $WID --delay 2000 Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 60
+printscreen
+#-----------------------
+# Wine dotnet48 ------------
+sleep 21
+while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+	sleep 2
+done
+printscreen
+echo "Sending dotnet keystrokes..."
+xdotool key --window $WID --delay 2000 Tab Tab Tab Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+while ! WID=$(xdotool search --name "Unnamed"); do
+	sleep 2
+done
+printscreen
+echo "Sending dotnet keystrokes..."
+xdotool key --window $WID --delay 2000 Tab Tab Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 Tab Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 120
+printscreen
+echo "* Waiting more 240s to finish"
+sleep 240
+printscreen
+xdotool key --window $WID --delay 2000 Tab
+sleep 2
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 2
+while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+	sleep 2
+done
+printscreen
+xdotool key --window $WID --delay 2000 space
+sleep 28
+#-----------------------
 
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"
 #---------------
 
-touch wine64bottle.tar.gz
-#tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
+tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
 #tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz

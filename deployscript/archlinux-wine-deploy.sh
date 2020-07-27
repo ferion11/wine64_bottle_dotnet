@@ -145,8 +145,8 @@ giving_time_1m_step() {
 install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	chmod +x ./winetricks
-	./winetricks -q -v dotnet48
-	#./winetricks -v dotnet48 &
+	./winetricks -q dotnet48
+	#./winetricks dotnet48 &
 }
 install_dotnet_from_winetricks
 

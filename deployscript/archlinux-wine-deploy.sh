@@ -145,8 +145,8 @@ giving_time_1m_step() {
 install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	chmod +x ./winetricks
-	./winetricks -c dotnet48
-	#./winetricks dotnet48 &
+	./winetricks -q -v dotnet48
+	#./winetricks -v dotnet48 &
 }
 install_dotnet_from_winetricks
 
@@ -238,7 +238,8 @@ wineserver -w
 kill -15 "${Xvfb_PID}"
 #---------------
 
-tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
+#tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
+touch wine64bottle.tar.gz
 #tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
 #tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 

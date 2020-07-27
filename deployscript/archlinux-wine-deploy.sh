@@ -80,7 +80,8 @@ sleep 7
 
 echo "* exporting wine var and creating bottle"
 mkdir -p "${WINE64BOTTLE}"
-export WINEARCH=win64
+export WINEARCH=win32
+#export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
 wineboot &
 echo "* Waiting to initialize wine..."

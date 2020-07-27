@@ -87,50 +87,38 @@ wineboot &
 echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit
-# Wine Mono ------------
-while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+close_wine_mono_init_windows() {
+	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+		sleep 2
+	done
+	#printscreen
+	echo "Sending installer keystrokes..."
+	xdotool key --window $WID --delay 2000 Tab
 	sleep 2
-done
-#printscreen
-echo "Sending installer keystrokes..."
-xdotool key --window $WID --delay 2000 Tab
-sleep 2
-#printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-#printscreen
-sleep 5
-#-----------------------
+	#printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 2
+	#printscreen
+	sleep 5
+}
+close_wine_mono_init_windows
 
-# Wine Gecko ------------
-while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+close_wine_gecko_init_windows() {
+	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+		sleep 2
+	done
+	#printscreen
+	echo "Sending installer keystrokes..."
+	xdotool key --window $WID --delay 2000 Tab
 	sleep 2
-done
-#printscreen
-echo "Sending installer keystrokes..."
-xdotool key --window $WID --delay 2000 Tab
-sleep 2
-#printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-#printscreen
-sleep 5
-#-----------------------
-
-# Wine Gecko ------------
-while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+	#printscreen
+	xdotool key --window $WID --delay 2000 space
 	sleep 2
-done
-#printscreen
-echo "Sending installer keystrokes..."
-xdotool key --window $WID --delay 2000 Tab
-sleep 2
-#printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-#printscreen
-sleep 5
-#-----------------------
+	#printscreen
+	sleep 5
+}
+close_wine_gecko_init_windows
+#close_wine_gecko_init_windows
 
 sleep 14
 ps ux | grep wine
@@ -139,100 +127,101 @@ ps ux | grep wine
 wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 chmod +x ./winetricks
 
-#(
-## sleep in bash for loop feedback - starting after 2min ##
-#sleep 120
-#for i in {1..60}
-#do
-#	sleep 60
-#	echo "------- $i min ------- "
-#	ps ux | grep wine
-#done
-#) &
+giving_time_1m_step() {
+	# sleep in bash for loop feedback - starting after 2min ##
+	sleep 120
+	for i in {1..60}
+	do
+		sleep 60
+		echo "------- $i min ------- "
+		ps ux | grep wine
+	done
+}
+#( giving_time_1m_step ) &
 #SLEEP_PID=$!
 
 ./winetricks -c dotnet48
 #./winetricks dotnet48 &
 
 handle_gui_winetricks_dotnet48() {
-# Wine dotnet40 ------------
-sleep 21
-while ! WID=$(xdotool search --name "Unnamed"); do
+	# Wine dotnet40 ------------
+	sleep 21
+	while ! WID=$(xdotool search --name "Unnamed"); do
+		sleep 2
+	done
+	printscreen
+	echo "Sending dotnet keystrokes..."
+	xdotool key --window $WID --delay 2000 Tab Tab Tab
 	sleep 2
-done
-printscreen
-echo "Sending dotnet keystrokes..."
-xdotool key --window $WID --delay 2000 Tab Tab Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 Tab Tab Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 120
-printscreen
-sleep 120
-printscreen
-echo "* Waiting more 300s to finish"
-sleep 300
-printscreen
-xdotool key --window $WID --delay 2000 Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 60
-printscreen
-#-----------------------
-# Wine dotnet48 ------------
-sleep 21
-while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+	printscreen
+	xdotool key --window $WID --delay 2000 space
 	sleep 2
-done
-printscreen
-echo "Sending dotnet keystrokes..."
-xdotool key --window $WID --delay 2000 Tab Tab Tab Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-while ! WID=$(xdotool search --name "Unnamed"); do
+	printscreen
+	xdotool key --window $WID --delay 2000 Tab Tab Tab
 	sleep 2
-done
-printscreen
-echo "Sending dotnet keystrokes..."
-xdotool key --window $WID --delay 2000 Tab Tab Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 Tab Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 120
-printscreen
-echo "* Waiting more 240s to finish"
-sleep 240
-printscreen
-xdotool key --window $WID --delay 2000 Tab
-sleep 2
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 2
-while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 120
+	printscreen
+	sleep 120
+	printscreen
+	echo "* Waiting more 300s to finish"
+	sleep 300
+	printscreen
+	xdotool key --window $WID --delay 2000 Tab
 	sleep 2
-done
-printscreen
-xdotool key --window $WID --delay 2000 space
-sleep 28
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 60
+	printscreen
+	#-----------------------
+	# Wine dotnet48 ------------
+	sleep 21
+	while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+		sleep 2
+	done
+	printscreen
+	echo "Sending dotnet keystrokes..."
+	xdotool key --window $WID --delay 2000 Tab Tab Tab Tab
+	sleep 2
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 2
+	while ! WID=$(xdotool search --name "Unnamed"); do
+		sleep 2
+	done
+	printscreen
+	echo "Sending dotnet keystrokes..."
+	xdotool key --window $WID --delay 2000 Tab Tab Tab
+	sleep 2
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 2
+	printscreen
+	xdotool key --window $WID --delay 2000 Tab Tab
+	sleep 2
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 120
+	printscreen
+	echo "* Waiting more 240s to finish"
+	sleep 240
+	printscreen
+	xdotool key --window $WID --delay 2000 Tab
+	sleep 2
+	printscreen
+	xdotool key --window $WID --delay 2000 space
+	sleep 2
+	while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
+		sleep 2
+	done
+	printscreen
+	xdotool key --window $WID --delay 2000 space
 }
 #handle_gui_winetricks_dotnet48
 #-----------------------
 
+sleep 28
 # kill Xvfb whenever you feel like it
 #kill -9 "${SLEEP_PID}"
 kill -15 "${Xvfb_PID}"

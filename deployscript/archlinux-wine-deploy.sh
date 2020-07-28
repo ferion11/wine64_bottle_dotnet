@@ -91,14 +91,14 @@ close_wine_mono_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 		sleep 2
 	done
-	#printscreen
+	printscreen
 	echo "Sending installer keystrokes..."
-	xdotool key --delay 2000 Tab
+	xdotool key --window $WID --delay 1000 Tab
 	sleep 1
-	#printscreen
-	xdotool key --delay 2000 space
+	printscreen
+	xdotool key --window $WID --delay 1000 space
 	sleep 2
-	#printscreen
+	printscreen
 	sleep 7
 }
 close_wine_mono_init_windows
@@ -107,14 +107,14 @@ close_wine_gecko_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
 		sleep 2
 	done
-#	printscreen
-#	echo "Sending installer keystrokes..."
-#	xdotool key --delay 2000 Tab
-#	sleep 2
-	#printscreen
-	xdotool key --delay 2000 space
-	sleep 14
-	#printscreen
+	printscreen
+	echo "Sending installer keystrokes..."
+	xdotool key --window $WID --delay 1000 Tab
+	sleep 1
+	printscreen
+	xdotool key --window $WID --delay 1000 space
+	sleep 7
+	printscreen
 }
 close_wine_gecko_init_windows
 close_wine_gecko_init_windows

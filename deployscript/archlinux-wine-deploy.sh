@@ -129,18 +129,6 @@ wineserver -w
 #sleep 60 && printscreen
 ps ux | grep wine
 
-giving_time_1m_step() {
-	# sleep in bash for loop feedback - starting after 2min ##
-	sleep 120
-	for i in {1..60}
-	do
-		sleep 60
-		echo "------- $i min ------- "
-		ps ux | grep wine
-	done
-}
-#( giving_time_1m_step ) &
-#SLEEP_PID=$!
 
 install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
@@ -230,9 +218,6 @@ handle_gui_winetricks_dotnet48() {
 
 # This will hang until all wine processes in prefix=$WINEPREFIX
 wineserver -w
-
-#kill -9 "${SLEEP_PID}"
-#killall -9 sleep
 
 # kill Xvfb whenever you feel like it
 kill -15 "${Xvfb_PID}"

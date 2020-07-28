@@ -93,15 +93,15 @@ close_wine_mono_init_windows() {
 	done
 	#printscreen
 	echo "Sending installer keystrokes..."
-	xdotool key --window $WID --delay 2000 Tab
-	sleep 2
+	xdotool key --delay 2000 Tab
+	sleep 1
 	#printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 2
 	#printscreen
 	sleep 7
 }
-#close_wine_mono_init_windows
+close_wine_mono_init_windows
 
 close_wine_gecko_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
@@ -109,15 +109,15 @@ close_wine_gecko_init_windows() {
 	done
 #	printscreen
 #	echo "Sending installer keystrokes..."
-#	xdotool key --window $WID --delay 2000 Tab
+#	xdotool key --delay 2000 Tab
 #	sleep 2
 	#printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 14
 	#printscreen
 }
-#close_wine_gecko_init_windows
-#close_wine_gecko_init_windows
+close_wine_gecko_init_windows
+close_wine_gecko_init_windows
 
 # This will kill all running wine processes in prefix=$WINEPREFIX
 #wineserver -k
@@ -158,16 +158,16 @@ handle_gui_winetricks_dotnet48() {
 	done
 	printscreen
 	echo "Sending dotnet keystrokes..."
-	xdotool key --window $WID --delay 2000 Tab Tab Tab
+	xdotool key --delay 2000 Tab Tab Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 Tab Tab Tab
+	xdotool key --delay 2000 Tab Tab Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 120
 	printscreen
 	sleep 120
@@ -175,10 +175,10 @@ handle_gui_winetricks_dotnet48() {
 	echo "* Waiting more 300s to finish"
 	sleep 300
 	printscreen
-	xdotool key --window $WID --delay 2000 Tab
+	xdotool key --delay 2000 Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 60
 	printscreen
 	#-----------------------
@@ -189,41 +189,41 @@ handle_gui_winetricks_dotnet48() {
 	done
 	printscreen
 	echo "Sending dotnet keystrokes..."
-	xdotool key --window $WID --delay 2000 Tab Tab Tab Tab
+	xdotool key --delay 2000 Tab Tab Tab Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 2
 	while ! WID=$(xdotool search --name "Unnamed"); do
 		sleep 2
 	done
 	printscreen
 	echo "Sending dotnet keystrokes..."
-	xdotool key --window $WID --delay 2000 Tab Tab Tab
+	xdotool key --delay 2000 Tab Tab Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 Tab Tab
+	xdotool key --delay 2000 Tab Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 120
 	printscreen
 	echo "* Waiting more 240s to finish"
 	sleep 240
 	printscreen
-	xdotool key --window $WID --delay 2000 Tab
+	xdotool key --delay 2000 Tab
 	sleep 2
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 	sleep 2
 	while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
 		sleep 2
 	done
 	printscreen
-	xdotool key --window $WID --delay 2000 space
+	xdotool key --delay 2000 space
 }
 #handle_gui_winetricks_dotnet48
 #-----------------------

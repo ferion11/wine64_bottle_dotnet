@@ -137,8 +137,7 @@ export WINEPREFIX="${WINE64BOTTLE}"
 wineboot &
 echo "* Waiting to initialize wine..."
 
-# 2 times, one for 32bit and another for 64bit
-
+# 2 times, one for 32bit and another for 64bit:
 echo "* wine mono cancel part1"
 close_wine_mono_init_windows
 
@@ -249,8 +248,8 @@ handle_gui_winetricks_dotnet48() {
 #handle_gui_winetricks_dotnet48
 #-----------------------
 
-# This will hang until all wine processes in prefix=$WINEPREFIX
-wineserver -w
+## This will hang until all wine processes in prefix=$WINEPREFIX
+#wineserver -w
 
 # kill Xvfb whenever you feel like it
 kill -15 "${Xvfb_PID}"

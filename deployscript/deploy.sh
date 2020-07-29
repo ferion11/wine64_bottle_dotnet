@@ -147,18 +147,21 @@ handle_gui_winetricks_dotnet48() {
 	xdotool key --delay 2000 space
 }
 #===========================================================================================
-export WINE64BOTTLE="${HOME}/wine64bottle"
-
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
 
-# just to test the screen:
-zenity --calendar &
+# updating wine https://wiki.winehq.org/Ubuntu:
+wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
+sudo apt update
+sudo apt install --install-recommends winehq-staging=5.11
 
-#--------------
+export WINE64BOTTLE="${HOME}/wine64bottle"
+
 #export WINEARCH=win32
 export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"
+
 #--------------
 
 echo "* creating bottle ..."

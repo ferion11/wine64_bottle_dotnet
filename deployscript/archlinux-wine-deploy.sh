@@ -145,12 +145,13 @@ close_wine_mono_init_windows
 echo "* wine gecko cancel 32bit:"
 close_wine_gecko_init_windows
 
-echo "* wine mono cancel 64bit:"
-close_wine_mono_init_windows
+#echo "* wine mono cancel 64bit:"
+#close_wine_mono_init_windows
 
-echo "* wine gecko cancel 32bit:"
-close_wine_gecko_init_windows
+#echo "* wine gecko cancel 64bit:"
+#close_wine_gecko_init_windows
 
+echo "* ... waiting wineboot to finish ..."
 # This will kill all running wine processes in prefix=$WINEPREFIX
 #wineserver -k
 

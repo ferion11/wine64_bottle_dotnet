@@ -15,6 +15,27 @@ printscreen() {
 	PRINT_NUM=$((PRINT_NUM+1))
 }
 
+wine_playonlinux() {
+	echo "* Download and install wine from another source:"
+	wget -q "${WINE_URL}" || die "Can't download the: ${WINE_URL}"
+
+	export WINEINSTALLATION="$HOME/wine_installation"
+	mkdir "${WINEINSTALLATION}"
+	tar xf "${WINE_FILENAME}" -C "${WINEINSTALLATION}"/ || die "Can't extract the: ${WINE_FILENAME}"
+
+	#-------
+	# the installation replace:
+	export PATH="${WINEINSTALLATION}/bin:${PATH}"
+	export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
+
+	export WINELOADER="${WINEINSTALLATION}/bin/wine"
+	export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
+	export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
+
+#	export WINE="${WINEINSTALLATION}/bin/wine64"
+#	export WINESERVER="${WINEINSTALLATION}/bin/wineserver"
+}
+
 close_wine_mono_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
 		sleep 3
@@ -128,25 +149,10 @@ handle_gui_winetricks_dotnet48() {
 #===========================================================================================
 export WINE64BOTTLE="${HOME}/wine64bottle"
 
+#echo "using the wine from playonlinux: "
+#wine_playonlinux
+
 #--------------
-echo "* Download and install wine from another source:"
-wget -nc "${WINE_URL}" || die "Can't download the: ${WINE_URL}"
-export WINEINSTALLATION="$HOME/wine_installation"
-mkdir "${WINEINSTALLATION}"
-tar xf "${WINE_FILENAME}" -C "${WINEINSTALLATION}"/ || die "Can't extract the: ${WINE_FILENAME}"
-
-#-------
-# the installation replace:
-export PATH="${WINEINSTALLATION}/bin:${PATH}"
-export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
-
-export WINELOADER="${WINEINSTALLATION}/bin/wine"
-export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
-export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
-
-export WINE="${WINEINSTALLATION}/bin/wine64"
-export WINESERVER="${WINEINSTALLATION}/bin/wineserver"
-
 #export WINEARCH=win32
 export WINEARCH=win64
 export WINEPREFIX="${WINE64BOTTLE}"

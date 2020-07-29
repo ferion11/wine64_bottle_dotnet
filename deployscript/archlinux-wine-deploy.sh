@@ -139,24 +139,24 @@ echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit
 
-echo "* wine mono cancel 32bit:"
+echo "* wine mono cancel part1"
 close_wine_mono_init_windows
 
-echo "* wine gecko cancel 32bit:"
-close_wine_gecko_init_windows
+#echo "* wine gecko cancel part1:"
+#close_wine_gecko_init_windows
 
-#echo "* wine mono cancel 64bit:"
+#echo "* wine mono cancel part2:"
 #close_wine_mono_init_windows
 
-#echo "* wine gecko cancel 64bit:"
+#echo "* wine gecko cancel part2:"
 #close_wine_gecko_init_windows
 
 echo "* ... waiting wineboot to finish ..."
 # This will kill all running wine processes in prefix=$WINEPREFIX
-#wineserver -k
+wineserver -k
 
 # This will hang until all wine processes in prefix=$WINEPREFIX
-wineserver -w
+#wineserver -w
 
 # Alternative to test only
 #sleep 60 && printscreen

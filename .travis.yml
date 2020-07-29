@@ -1,8 +1,8 @@
 dist: bionic
 addons:
   apt:
-#    sources:
-#      - ppa:git-core/ppa
+    sources:
+      - ppa:cybermax-dexter/sdl2-backport
     packages:
     - mpg123
     - xdotool

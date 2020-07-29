@@ -154,9 +154,7 @@ handle_gui_winetricks_dotnet48() {
 wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
 sudo apt update
-#sudo apt install --install-recommends wine-staging-amd64=5.11 wine-staging:i386=5.11
-#sudo apt install --install-recommends wine-stable
-sudo apt install --install-recommends wine-stable-amd64 || die "Can't install updated wine"
+sudo apt install -y --install-recommends winehq-stable || die "Can't install updated wine"
 
 export WINE64BOTTLE="${HOME}/wine64bottle"
 

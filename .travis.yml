@@ -15,7 +15,7 @@ addons:
     - sed
     - procps
     - mpg123
-    - wine
+    - wine-stable
     - xvfb
     - xdotool
     - imagemagick

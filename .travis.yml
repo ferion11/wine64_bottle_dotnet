@@ -40,7 +40,7 @@ before_install:
 
 script:
   #- sudo bash deployscript/deploy.sh
-  - xvfb-run --server-args="-screen 0 1024x768x24" bash deployscript/deploy.sh
+  - bash deployscript/deploy.sh
 
 after_success:
   # md5sum tool

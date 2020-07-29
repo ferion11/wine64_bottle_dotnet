@@ -150,15 +150,6 @@ handle_gui_winetricks_dotnet48() {
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
 
-# add deps for wine:
-sudo add-apt-repository -y ppa:cybermax-dexter/sdl2-backport
-
-# updating wine https://wiki.winehq.org/Ubuntu:
-wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
-sudo apt update
-sudo apt install -y --install-recommends winehq-stable || die "Can't install updated wine"
-
 export WINE64BOTTLE="${HOME}/wine64bottle"
 
 #export WINEARCH=win32
@@ -170,17 +161,13 @@ export WINEPREFIX="${WINE64BOTTLE}"
 echo "* creating bottle ..."
 wine64 wineboot &
 echo "* Waiting to initialize wine..."
-sleep 7
-printscreen
-sleep 7
-printscreen
 
 # 2 times, one for 32bit and another for 64bit:
 #echo "* wine mono cancel part1"
-#close_wine_mono_init_windows
+close_wine_mono_init_windows
 
 #echo "* wine gecko cancel part1:"
-#close_wine_gecko_init_windows
+close_wine_gecko_init_windows
 
 #echo "* wine mono cancel part2:"
 #close_wine_mono_init_windows
@@ -190,6 +177,7 @@ printscreen
 
 echo "* ... waiting wineboot to finish ..."
 # This will kill all running wine processes in prefix=$WINEPREFIX
+printscreen
 wineserver -k
 
 # This will hang until all wine processes in prefix=$WINEPREFIX

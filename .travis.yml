@@ -19,8 +19,16 @@ env:
     - RELEASE_BRANCH="master"
 
 before_install:
-  # Wine WoW64 for native install:
-  - wget -nv -c https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz
+  # add deps for wine:
+  - sudo add-apt-repository -y ppa:cybermax-dexter/sdl2-backport
+
+  # updating wine https://wiki.winehq.org/Ubuntu:
+  - wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+  - sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
+  - sudo apt update
+  - sudo apt install -y --install-recommends winehq-stable
+
+  #making result dir
   - mkdir result
 
 script:

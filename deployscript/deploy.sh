@@ -155,7 +155,7 @@ wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
 sudo apt update
 #sudo apt install --install-recommends winehq-staging=5.11
-sudo apt install --install-recommends winehq-staging
+sudo apt install --install-recommends winehq-devel=5.11
 
 export WINE64BOTTLE="${HOME}/wine64bottle"
 

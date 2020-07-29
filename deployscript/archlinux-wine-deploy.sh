@@ -69,6 +69,37 @@ pacman -Syu --noconfirm
 #Add "base-devel multilib-devel" for compile in the list:
 pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep sed zstd xz bzip2 procps-ng wine wine-gecko wine-mono wine-nine mpg123 lib32-mpg123 gst-plugins-base-libs lib32-gst-plugins-base-libs xorg-server-xvfb xdotool imagemagick xorg-xwd
 #===========================================================================================
+
+close_wine_mono_init_windows() {
+	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
+		sleep 2
+	done
+	printscreen
+	echo "Sending installer keystrokes..."
+	xdotool key --window $WID --delay 1000 Tab
+	sleep 1
+	printscreen
+	xdotool key --window $WID --delay 1000 space
+	sleep 2
+	printscreen
+	sleep 7
+}
+
+close_wine_gecko_init_windows() {
+	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
+		sleep 2
+	done
+	printscreen
+	echo "Sending installer keystrokes..."
+	xdotool key --window $WID --delay 1000 Tab
+	sleep 1
+	printscreen
+	xdotool key --window $WID --delay 1000 space
+	sleep 7
+	printscreen
+}
+#===========================================================================================
+
 echo "======= DEBUG: Starting xvfb ======="
 Xvfb :77 -screen 0 1024x768x24 &
 Xvfb_PID=$!
@@ -107,36 +138,17 @@ wineboot &
 echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit
-close_wine_mono_init_windows() {
-	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
-		sleep 2
-	done
-	printscreen
-	echo "Sending installer keystrokes..."
-	xdotool key --window $WID --delay 1000 Tab
-	sleep 1
-	printscreen
-	xdotool key --window $WID --delay 1000 space
-	sleep 2
-	printscreen
-	sleep 7
-}
+
+echo "* wine mono cancel 32bit:"
 close_wine_mono_init_windows
 
-close_wine_gecko_init_windows() {
-	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
-		sleep 2
-	done
-	printscreen
-	echo "Sending installer keystrokes..."
-	xdotool key --window $WID --delay 1000 Tab
-	sleep 1
-	printscreen
-	xdotool key --window $WID --delay 1000 space
-	sleep 7
-	printscreen
-}
+echo "* wine gecko cancel 32bit:"
 close_wine_gecko_init_windows
+
+echo "* wine mono cancel 64bit:"
+close_wine_mono_init_windows
+
+echo "* wine gecko cancel 32bit:"
 close_wine_gecko_init_windows
 
 # This will kill all running wine processes in prefix=$WINEPREFIX

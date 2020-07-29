@@ -1,24 +1,13 @@
 dist: bionic
 addons:
   apt:
-    sources:
-      - ppa:git-core/ppa
+#    sources:
+#      - ppa:git-core/ppa
     packages:
-    - aptitude
-    - wget
-    - file
-    - git
-    - tar
-    - gzip
-    - bzip2
-    - grep
-    - sed
-    - procps
     - mpg123
     - wine-stable
-    - xvfb
+    - wine32
     - xdotool
-    - imagemagick
     - x11-apps
     - zenity
 
@@ -34,9 +23,6 @@ env:
     - RELEASE_BRANCH="master"
 
 before_install:
-  - sudo dpkg --add-architecture i386
-  - sudo apt-get update
-
   # Wine WoW64 for native install:
   - wget -nv -c https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz
   - mkdir result

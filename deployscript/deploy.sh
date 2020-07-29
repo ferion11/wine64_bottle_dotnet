@@ -3,7 +3,7 @@
 # travis use DISPLAY=:99.0 to xvfb
 # the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
 WINE_URL="https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.11-staging-linux-x86.tar.gz"
-WINE_FILENAME=$(echo $P_URL | cut -d/ -f8)
+WINE_FILENAME=$(echo ${WINE_URL} | cut -d/ -f8)
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };

@@ -44,10 +44,8 @@ close_wine_mono_init_windows() {
 	echo "Sending installer keystrokes..."
 	xdotool key --window $WID --delay 1000 Tab
 	sleep 1
-	printscreen
 	xdotool key --window $WID --delay 1000 space
 	sleep 2
-	printscreen
 }
 
 close_wine_gecko_init_windows() {
@@ -58,10 +56,8 @@ close_wine_gecko_init_windows() {
 	echo "Sending installer keystrokes..."
 	xdotool key --window $WID --delay 1000 Tab
 	sleep 1
-	printscreen
 	xdotool key --window $WID --delay 1000 space
 	sleep 2
-	printscreen
 }
 
 install_dotnet_from_winetricks() {
@@ -181,24 +177,21 @@ close_wine_gecko_init_windows
 echo "* ... waiting wineboot to finish ..."
 wineserver -w
 
-# Alternative to test only
-#sleep 60 && printscreen
-ps ux | grep wine
 
 install_dotnet_from_winetricks
+
 
 # GUI: Dont need it now, using -q
 #handle_gui_winetricks_dotnet48
 
-
-## This will hang until all wine processes in prefix=$WINEPREFIX
-#wineserver -w
+echo "* ... waiting winetricks to finish ..."
+wineserver -w
 #-----------------------
 
 
-echo "* copying the results: ..."
+echo "* Compressing and copying the results: ..."
 
-tar cvzf wine64bottle.tar.gz "${WINEPREFIX}"
+tar czf wine64bottle.tar.gz "${WINEPREFIX}"
 mv wine64bottle.tar.gz ./result/
 
 tar cvzf screenshots.tar.gz ./screenshot*

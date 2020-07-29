@@ -178,11 +178,8 @@ close_wine_gecko_init_windows
 echo "* wine gecko cancel part2:"
 close_wine_gecko_init_windows
 
-sleep 21
-printscreen
-wineserver -k
 echo "* ... waiting wineboot to finish ..."
-#wineserver -w
+wineserver -w
 
 # Alternative to test only
 #sleep 60 && printscreen

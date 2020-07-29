@@ -175,8 +175,8 @@ close_wine_gecko_init_windows
 #echo "* wine mono cancel part2:"
 #close_wine_mono_init_windows
 
-#echo "* wine gecko cancel part2:"
-#close_wine_gecko_init_windows
+echo "* wine gecko cancel part2:"
+close_wine_gecko_init_windows
 
 sleep 21
 printscreen

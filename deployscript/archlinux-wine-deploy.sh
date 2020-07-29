@@ -256,10 +256,9 @@ wineserver -w
 kill -15 "${Xvfb_PID}"
 #---------------
 
+touch wine64bottle.tar.gz
 #tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
-#touch wine64bottle.tar.gz
-#tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-tar cvzf wine64bottle.tar.gz /tmp/screenshot*
+tar cvzf screenshots64.tar.gz /tmp/screenshot*
 
-tar cvf result.tar wine64bottle.tar.gz
+tar cvf result.tar wine64bottle.tar.gz screenshots64.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

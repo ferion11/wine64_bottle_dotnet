@@ -72,7 +72,7 @@ pacman -S --noconfirm wget base-devel multilib-devel pacman-contrib git tar grep
 
 close_wine_mono_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Mono Installer"); do
-		sleep 2
+		sleep 3
 	done
 	printscreen
 	echo "Sending installer keystrokes..."
@@ -82,12 +82,11 @@ close_wine_mono_init_windows() {
 	xdotool key --window $WID --delay 1000 space
 	sleep 2
 	printscreen
-	sleep 7
 }
 
 close_wine_gecko_init_windows() {
 	while ! WID=$(xdotool search --name "Wine Gecko Installer"); do
-		sleep 2
+		sleep 3
 	done
 	printscreen
 	echo "Sending installer keystrokes..."
@@ -95,72 +94,9 @@ close_wine_gecko_init_windows() {
 	sleep 1
 	printscreen
 	xdotool key --window $WID --delay 1000 space
-	sleep 7
+	sleep 2
 	printscreen
 }
-#===========================================================================================
-
-echo "======= DEBUG: Starting xvfb ======="
-Xvfb :77 -screen 0 1024x768x24 &
-Xvfb_PID=$!
-sleep 7
-echo "* exporting the DISPLAY:"
-export DISPLAY=:77
-sleep 7
-#--------
-# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
-wget -nv -c "https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz"
-mkdir "/tmp/wine"
-tar xf "wine-5.11-staging-amd64.tar.xz" -C "/tmp/wine"
-export WINEINSTALLATION="/tmp/wine/wine-5.11-staging-amd64"
-
-# the installation replace:
-export PATH="${WINEINSTALLATION}/bin:${PATH}"
-export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
-
-export WINELOADER="${WINEINSTALLATION}/bin/wine"
-export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
-export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
-
-export WINE="${HERE}/data/wine64/bin/wine"
-export WINESERVER="${HERE}/data/wine64/bin/wineserver"
-
-#export WINEARCH=win64
-#export WINEPREFIX="${HERE}/data/wine64_bottle"
-#--------
-
-echo "* exporting wine var and creating bottle"
-mkdir -p "${WINE64BOTTLE}"
-#export WINEARCH=win32
-export WINEARCH=win64
-export WINEPREFIX="${WINE64BOTTLE}"
-wineboot &
-echo "* Waiting to initialize wine..."
-
-# 2 times, one for 32bit and another for 64bit:
-echo "* wine mono cancel part1"
-close_wine_mono_init_windows
-
-#echo "* wine gecko cancel part1:"
-#close_wine_gecko_init_windows
-
-#echo "* wine mono cancel part2:"
-#close_wine_mono_init_windows
-
-#echo "* wine gecko cancel part2:"
-#close_wine_gecko_init_windows
-
-echo "* ... waiting wineboot to finish ..."
-# This will kill all running wine processes in prefix=$WINEPREFIX
-wineserver -k
-
-# This will hang until all wine processes in prefix=$WINEPREFIX
-#wineserver -w
-
-# Alternative to test only
-#sleep 60 && printscreen
-ps ux | grep wine
-
 
 install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
@@ -168,7 +104,6 @@ install_dotnet_from_winetricks() {
 	./winetricks -q dotnet48
 	#./winetricks dotnet48 &
 }
-#install_dotnet_from_winetricks
 
 handle_gui_winetricks_dotnet48() {
 	# Wine dotnet40 ------------
@@ -245,6 +180,74 @@ handle_gui_winetricks_dotnet48() {
 	printscreen
 	xdotool key --delay 2000 space
 }
+#===========================================================================================
+
+echo "======= DEBUG: Starting xvfb ======="
+Xvfb :77 -screen 0 1024x768x24 &
+Xvfb_PID=$!
+sleep 7
+echo "* exporting the DISPLAY:"
+export DISPLAY=:77
+sleep 7
+#--------
+# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
+wget -nv -c "https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz"
+mkdir "/tmp/wine"
+tar xf "wine-5.11-staging-amd64.tar.xz" -C "/tmp/wine"
+export WINEINSTALLATION="/tmp/wine/wine-5.11-staging-amd64"
+
+# the installation replace:
+export PATH="${WINEINSTALLATION}/bin:${PATH}"
+export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
+
+export WINELOADER="${WINEINSTALLATION}/bin/wine"
+export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
+export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
+
+export WINE="${HERE}/data/wine64/bin/wine"
+export WINESERVER="${HERE}/data/wine64/bin/wineserver"
+
+#export WINEARCH=win64
+#export WINEPREFIX="${HERE}/data/wine64_bottle"
+#--------
+
+echo "* exporting wine var and creating bottle"
+mkdir -p "${WINE64BOTTLE}"
+#export WINEARCH=win32
+export WINEARCH=win64
+export WINEPREFIX="${WINE64BOTTLE}"
+wineboot &
+echo "* Waiting to initialize wine..."
+sleep 7
+printscreen
+
+# 2 times, one for 32bit and another for 64bit:
+#echo "* wine mono cancel part1"
+#close_wine_mono_init_windows
+
+#echo "* wine gecko cancel part1:"
+#close_wine_gecko_init_windows
+
+#echo "* wine mono cancel part2:"
+#close_wine_mono_init_windows
+
+#echo "* wine gecko cancel part2:"
+#close_wine_gecko_init_windows
+
+echo "* ... waiting wineboot to finish ..."
+# This will kill all running wine processes in prefix=$WINEPREFIX
+wineserver -k
+
+# This will hang until all wine processes in prefix=$WINEPREFIX
+#wineserver -w
+
+# Alternative to test only
+#sleep 60 && printscreen
+ps ux | grep wine
+
+#install_dotnet_from_winetricks
+
+# dont need it now, using -q
 #handle_gui_winetricks_dotnet48
 #-----------------------
 

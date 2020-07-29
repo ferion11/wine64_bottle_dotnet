@@ -128,8 +128,9 @@ export WINE64BOTTLE="${HOME}/wine64bottle"
 echo "* Download and install wine from another source:"
 # the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
 wget -nv -c "https://www.playonlinux.com/wine/binaries/phoenicis/upstream-linux-amd64/PlayOnLinux-wine-5.11-upstream-linux-amd64.tar.gz"
-tar xf "PlayOnLinux-wine*"
-export WINEINSTALLATION="$HOME/wine-5.11-staging-amd64"
+export WINEINSTALLATION="$HOME/wine_installation"
+mkdir "${WINEINSTALLATION}"
+tar xf "PlayOnLinux-wine*" -C "${WINEINSTALLATION}"
 
 #-------
 # the installation replace:
@@ -140,7 +141,7 @@ export WINELOADER="${WINEINSTALLATION}/bin/wine"
 export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
 export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
 
-export WINE="${WINEINSTALLATION}/bin/wine"
+export WINE="${WINEINSTALLATION}/bin/wine64"
 export WINESERVER="${WINEINSTALLATION}/bin/wineserver"
 
 #export WINEARCH=win32
@@ -193,7 +194,7 @@ ps ux | grep wine
 
 echo "* copying the results: ..."
 
-#tar cvzf wine64bottle.tar.gz "wine64bottle"
+#tar cvzf wine64bottle.tar.gz "${WINEPREFIX}"
 #mv wine64bottle.tar.gz ./result/
 
 tar cvzf screenshots.tar.gz ./screenshot*

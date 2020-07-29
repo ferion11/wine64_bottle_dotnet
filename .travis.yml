@@ -1,30 +1,51 @@
+dist: bionic
+addons:
+  apt:
+    sources:
+      - ppa:git-core/ppa
+    packages:
+    - aptitude
+    - wget
+    - file
+    - git
+    - tar
+    - gzip
+    - bzip2
+    - grep
+    - sed
+    - procps
+    - mpg123
+    - wine
+    - xvfb
+    - xdotool
+    - imagemagick
+    - x11-apps
+    - zenity
+
+services:
+  - xvfb
+
 sudo: required
 
 language: cpp
-services:
-  - docker
 
 env:
   global:
     - RELEASE_BRANCH="master"
 
+before_install:
+  # Wine WoW64 for native install:
+  - wget -nv -c https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz
+  - mkdir result
+
 script:
-  # archlinux
-  - docker build . -f deploydocker/Dockerfile.wine-deploy.archlinux -t wine-appimage.archlinux
+  #- sudo bash deployscript/deploy.sh
+  - xvfb-run --server-args="-screen 0 1024x768x24" bash deployscript/deploy.sh
 
 after_success:
-  - mkdir apps
-
-  # archlinux
-  - docker run --rm -v $(pwd)/apps:/tmp/apps -ti wine-appimage.archlinux cp result.tar /tmp/apps
-  
-  # extract result
-  - tar xvf apps/result.tar -C apps
-  - rm -rf apps/result.tar
-
   # md5sum tool
   - wget -c https://github.com/ferion11/libsutil/releases/download/md5sum_util_v0.1/md5sum_util.sh
-  - bash md5sum_util.sh apps
+  - bash md5sum_util.sh result
 
   # uploadtool
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
@@ -34,15 +55,15 @@ after_success:
       echo 'Publishing release to GitHub...'
       export UPLOADTOOL_SUFFIX="$TRAVIS_BRANCH"
       export UPLOADTOOL_BODY="Instructions on using the AppImage can be found [here](https://github.com/${TRAVIS_REPO_SLUG}/blob/master/README.md)\n\nThis is the ***$UPLOADTOOL_SUFFIX experimental build*** for testing new features.\n\nTravis CI build log: $TRAVIS_BUILD_WEB_URL"
-      bash upload.sh apps/*
+      bash upload.sh result/*
     elif [[ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ]]; then
       echo 'Publishing release to GitHub...'
       export UPLOADTOOL_BODY="Instructions on using the AppImage can be found [here](https://github.com/${TRAVIS_REPO_SLUG}/blob/master/README.md)\n\nThis is the ***latest development build***.\n\nTravis CI build log: $TRAVIS_BUILD_WEB_URL"
-      bash upload.sh apps/*
+      bash upload.sh result/*
     else
       echo 'Publishing release to GitHub...'
       export UPLOADTOOL_BODY="Instructions on using the AppImage can be found [here](https://github.com/${TRAVIS_REPO_SLUG}/blob/master/README.md)\n\nThis is the ***release $TRAVIS_TAG stable build***.\n\nTravis CI build log: $TRAVIS_BUILD_WEB_URL"
-      bash upload.sh apps/*
+      bash upload.sh result/*
     fi
 
 branches:

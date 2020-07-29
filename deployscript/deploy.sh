@@ -150,6 +150,9 @@ handle_gui_winetricks_dotnet48() {
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
 
+# add deps for wine:
+sudo add-apt-repository -y ppa:cybermax-dexter/sdl2-backport
+
 # updating wine https://wiki.winehq.org/Ubuntu:
 wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'

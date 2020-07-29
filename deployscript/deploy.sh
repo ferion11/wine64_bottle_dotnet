@@ -185,9 +185,9 @@ wineserver -w
 #sleep 60 && printscreen
 ps ux | grep wine
 
-#install_dotnet_from_winetricks
+install_dotnet_from_winetricks
 
-# dont need it now, using -q
+# GUI: Dont need it now, using -q
 #handle_gui_winetricks_dotnet48
 
 
@@ -198,8 +198,8 @@ ps ux | grep wine
 
 echo "* copying the results: ..."
 
-#tar cvzf wine64bottle.tar.gz "${WINEPREFIX}"
-#mv wine64bottle.tar.gz ./result/
+tar cvzf wine64bottle.tar.gz "${WINEPREFIX}"
+mv wine64bottle.tar.gz ./result/
 
 tar cvzf screenshots.tar.gz ./screenshot*
 mv screenshots.tar.gz ./result/

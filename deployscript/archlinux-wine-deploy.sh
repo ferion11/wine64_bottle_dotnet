@@ -77,6 +77,26 @@ echo "* exporting the DISPLAY:"
 export DISPLAY=:77
 sleep 7
 #--------
+# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
+wget -nv -c "https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz"
+mkdir "/tmp/wine"
+tar xf "wine-5.11-staging-amd64.tar.xz" -C "/tmp/wine"
+export WINEINSTALLATION="/tmp/wine/wine-5.11-staging-amd64"
+
+# the installation replace:
+export PATH="${WINEINSTALLATION}/bin:${PATH}"
+export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
+
+export WINELOADER="${WINEINSTALLATION}/bin/wine"
+export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
+export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
+
+export WINE="${HERE}/data/wine64/bin/wine"
+export WINESERVER="${HERE}/data/wine64/bin/wineserver"
+
+#export WINEARCH=win64
+#export WINEPREFIX="${HERE}/data/wine64_bottle"
+#--------
 
 echo "* exporting wine var and creating bottle"
 mkdir -p "${WINE64BOTTLE}"
@@ -136,7 +156,7 @@ install_dotnet_from_winetricks() {
 	./winetricks -q dotnet48
 	#./winetricks dotnet48 &
 }
-install_dotnet_from_winetricks
+#install_dotnet_from_winetricks
 
 handle_gui_winetricks_dotnet48() {
 	# Wine dotnet40 ------------
@@ -224,9 +244,9 @@ kill -15 "${Xvfb_PID}"
 #---------------
 
 #tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}"
-touch wine64bottle.tar.gz
+#touch wine64bottle.tar.gz
 #tar cvzf wine64bottle.tar.gz "${WINE64BOTTLE}" /tmp/screenshot*
-#tar cvzf wine64bottle.tar.gz /tmp/screenshot*
+tar cvzf wine64bottle.tar.gz /tmp/screenshot*
 
 tar cvf result.tar wine64bottle.tar.gz
 echo "* result.tar size: $(du -hs result.tar)"

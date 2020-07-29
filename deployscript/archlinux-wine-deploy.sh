@@ -220,6 +220,8 @@ wineboot &
 echo "* Waiting to initialize wine..."
 sleep 7
 printscreen
+sleep 7
+printscreen
 
 # 2 times, one for 32bit and another for 64bit:
 #echo "* wine mono cancel part1"

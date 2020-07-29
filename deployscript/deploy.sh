@@ -63,7 +63,7 @@ close_wine_gecko_init_windows() {
 install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	chmod +x ./winetricks
-	./winetricks -q dotnet48
+	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
 	#./winetricks dotnet48 &
 }
 

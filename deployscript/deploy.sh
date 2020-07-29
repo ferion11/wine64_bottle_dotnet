@@ -128,7 +128,7 @@ export WINE64BOTTLE="${HOME}/wine64bottle"
 echo "* Download and install wine from another source:"
 # the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
 wget -nv -c "https://github.com/Kron4ek/Wine-Builds/releases/download/5.11/wine-5.11-staging-amd64.tar.xz"
-tar xf "wine-5.11-staging-amd64.tar.xz" -C "/tmp/wine"
+tar xf "wine-5.11-staging-amd64.tar.xz"
 export WINEINSTALLATION="$HOME/wine-5.11-staging-amd64"
 
 #-------

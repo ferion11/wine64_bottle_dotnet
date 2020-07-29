@@ -153,7 +153,7 @@ export WINEPREFIX="${WINE64BOTTLE}"
 #--------------
 
 echo "* creating bottle ..."
-wineboot &
+wine64 wineboot &
 echo "* Waiting to initialize wine..."
 sleep 7
 printscreen

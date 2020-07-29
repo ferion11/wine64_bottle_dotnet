@@ -5,9 +5,6 @@ addons:
 #      - ppa:git-core/ppa
     packages:
     - mpg123
-    - wine-stable
-    - wine32
-    - wine64
     - xdotool
     - x11-apps
     - zenity

@@ -64,84 +64,8 @@ install_dotnet_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	chmod +x ./winetricks
 	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
-	#./winetricks dotnet48 &
 }
 
-handle_gui_winetricks_dotnet48() {
-	# Wine dotnet40 ------------
-	sleep 21
-	while ! WID=$(xdotool search --name "Unnamed"); do
-		sleep 2
-	done
-	printscreen
-	echo "Sending dotnet keystrokes..."
-	xdotool key --delay 2000 Tab Tab Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 Tab Tab Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 120
-	printscreen
-	sleep 120
-	printscreen
-	echo "* Waiting more 300s to finish"
-	sleep 300
-	printscreen
-	xdotool key --delay 2000 Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 60
-	printscreen
-	#-----------------------
-	# Wine dotnet48 ------------
-	sleep 21
-	while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
-		sleep 2
-	done
-	printscreen
-	echo "Sending dotnet keystrokes..."
-	xdotool key --delay 2000 Tab Tab Tab Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 2
-	while ! WID=$(xdotool search --name "Unnamed"); do
-		sleep 2
-	done
-	printscreen
-	echo "Sending dotnet keystrokes..."
-	xdotool key --delay 2000 Tab Tab Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 Tab Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 120
-	printscreen
-	echo "* Waiting more 240s to finish"
-	sleep 240
-	printscreen
-	xdotool key --delay 2000 Tab
-	sleep 2
-	printscreen
-	xdotool key --delay 2000 space
-	sleep 2
-	while ! WID=$(xdotool search --name "Microsoft .NET Framework"); do
-		sleep 2
-	done
-	printscreen
-	xdotool key --delay 2000 space
-}
 #===========================================================================================
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
@@ -180,9 +104,6 @@ wineserver -w
 
 install_dotnet_from_winetricks
 
-
-# GUI: Dont need it now, using -q
-#handle_gui_winetricks_dotnet48
 
 echo "* ... waiting winetricks to finish ..."
 wineserver -w

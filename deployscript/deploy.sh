@@ -1,6 +1,9 @@
 #!/bin/bash
 # user mod with sudo acess: $HOME is /home/travis
 # travis use DISPLAY=:99.0 to xvfb
+# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
+WINE_URL="https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.11-staging-linux-x86.tar.gz"
+WINE_FILENAME=$(echo $P_URL | cut -d/ -f8)
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
@@ -126,11 +129,10 @@ export WINE64BOTTLE="${HOME}/wine64bottle"
 
 #--------------
 echo "* Download and install wine from another source:"
-# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
-wget -nv -c "https://www.playonlinux.com/wine/binaries/phoenicis/upstream-linux-amd64/PlayOnLinux-wine-5.11-upstream-linux-amd64.tar.gz"
+wget -c "${WINE_URL}"
 export WINEINSTALLATION="$HOME/wine_installation"
 mkdir "${WINEINSTALLATION}"
-tar xf "PlayOnLinux-wine*" -C "${WINEINSTALLATION}"
+tar xf "${WINE_FILENAME}" -C "${WINEINSTALLATION}"/
 
 #-------
 # the installation replace:

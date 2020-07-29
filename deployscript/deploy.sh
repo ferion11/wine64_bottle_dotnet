@@ -1,13 +1,13 @@
 #!/bin/bash
 # user mod with sudo acess: $HOME is /home/travis
+# travis use DISPLAY=:99.0 to xvfb
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
 
 PRINT_NUM=1
 printscreen() {
-	#xwd -display :77 -root -silent | convert xwd:- png:/tmp/screenshot_${PRINT_NUM}.png
-	xwd -root -silent | convert xwd:- png:./screenshot_${PRINT_NUM}.png
+	xwd -display :99 -root -silent | convert xwd:- png:./screenshot_${PRINT_NUM}.png
 	PRINT_NUM=$((PRINT_NUM+1))
 }
 

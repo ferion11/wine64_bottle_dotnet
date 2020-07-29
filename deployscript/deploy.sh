@@ -152,6 +152,9 @@ export WINE64BOTTLE="${HOME}/wine64bottle"
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
 
+# just to test the screen:
+zenity --calendar &
+
 #--------------
 #export WINEARCH=win32
 export WINEARCH=win64

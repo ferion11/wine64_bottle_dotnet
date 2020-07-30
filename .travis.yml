@@ -27,7 +27,7 @@ before_install:
   - sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
   - sudo apt update
   - sudo apt install -y --install-recommends winehq-staging winbind cabextract
-  - sudo apt install -y --install-recommends winehq-staging=5.11~bionic wine-staging=5.11~bionic wine-staging-amd64=5.11~bionic wine-staging-i386=5.11~bionic
+  - sudo apt install -y --allow-downgrades --install-recommends winehq-staging=5.11~bionic wine-staging=5.11~bionic wine-staging-amd64=5.11~bionic wine-staging-i386=5.11~bionic
 
   #making result dir
   - mkdir result

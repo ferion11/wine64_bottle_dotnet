@@ -60,9 +60,41 @@ close_wine_gecko_init_windows() {
 	sleep 2
 }
 
-install_dotnet_from_winetricks() {
+set_wine_regedit_keys() {
+	cat > disable-winemenubuilder.reg << EOF
+REGEDIT4
+[HKEY_CURRENT_USER\Software\Wine\DllOverrides]
+"winemenubuilder.exe"=""
+EOF
+
+	cat > renderer_gdi.reg << EOF
+REGEDIT4
+[HKEY_CURRENT_USER\Software\Wine\Direct3D]
+"DirectDrawRenderer"="gdi"
+"renderer"="gdi"
+EOF
+
+	echo "* Running: wine64 regedit.exe disable-winemenubuilder.reg"
+	wine64 regedit.exe disable-winemenubuilder.reg
+
+	echo "* Running: wine64 regedit.exe renderer_gdi.reg"
+	wine64 regedit.exe renderer_gdi.reg
+
+	echo "* ... wine64 regedit.exe to finish ..."
+	wineserver -w
+}
+
+install_packages_from_winetricks() {
 	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	chmod +x ./winetricks
+
+	echo "* starting winetricks -q corefonts ..."
+	./winetricks -q corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
+
+	echo "* starting winetricks -q settings fontsmooth=rgb ..."
+	./winetricks -q settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
+
+	echo "* starting winetricks -q dotnet48 ..."
 	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
 }
 
@@ -101,8 +133,8 @@ close_wine_gecko_init_windows
 echo "* ... waiting wineboot to finish ..."
 wineserver -w
 
-
-install_dotnet_from_winetricks
+set_wine_regedit_keys
+install_packages_from_winetricks
 
 
 echo "* ... waiting winetricks to finish ..."

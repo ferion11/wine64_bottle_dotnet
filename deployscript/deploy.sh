@@ -144,7 +144,7 @@ wineserver -w
 
 echo "* Compressing and copying the results: ..."
 
-tar czf wine64bottle.tar.gz "wine64bottle"
+tar czf wine64bottle.tar.gz "${WINEPREFIX}"
 mv wine64bottle.tar.gz ./result/
 
 tar cvzf screenshots.tar.gz ./screenshot*

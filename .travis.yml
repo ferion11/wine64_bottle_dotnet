@@ -26,7 +26,7 @@ before_install:
   - wget -O - https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
   - sudo add-apt-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main'
   - sudo apt update
-  - sudo apt install -y --install-recommends winehq-staging winbind
+  - sudo apt install -y --install-recommends winehq-staging winbind cabextract
 
   #making result dir
   - mkdir result

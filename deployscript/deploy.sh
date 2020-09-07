@@ -85,7 +85,8 @@ EOF
 }
 
 install_packages_from_winetricks() {
-	wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+	#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
+	wget -c https://github.com/ferion11/libsutil/releases/download/winetricks/winetricks
 	chmod +x ./winetricks
 
 	echo "* starting winetricks -q corefonts ..."

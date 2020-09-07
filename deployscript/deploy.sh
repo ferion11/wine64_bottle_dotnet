@@ -103,11 +103,12 @@ install_packages_from_winetricks() {
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
 
-export WINE64BOTTLE="${HOME}/wine64bottle"
+export WINE64_BOTTLE_NAME="wine64_bottle"
+export WINE64_BOTTLE="${HOME}/${WINE64_BOTTLE_NAME}"
 
 #export WINEARCH=win32
 export WINEARCH=win64
-export WINEPREFIX="${WINE64BOTTLE}"
+export WINEPREFIX="${WINE64_BOTTLE}"
 
 #--------------
 
@@ -145,8 +146,8 @@ wineserver -w
 
 echo "* Compressing and copying the results: ..."
 
-tar czf wine64bottle.tar.gz "${WINEPREFIX}"
-mv wine64bottle.tar.gz ./result/
+tar czf wine64_bottle.tar.gz "${WINE64_BOTTLE_NAME}"
+mv wine64_bottle.tar.gz ./result/
 
 tar cvzf screenshots.tar.gz ./screenshot*
 mv screenshots.tar.gz ./result/

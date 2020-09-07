@@ -2,9 +2,9 @@
 # user mod with sudo acess: $HOME is /home/travis
 # travis use DISPLAY=:99.0 to xvfb
 export DISPLAY=:99.0
-# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (thw WoW64 installation):
-WINE_URL="https://www.playonlinux.com/wine/binaries/phoenicis/staging-linux-x86/PlayOnLinux-wine-5.11-staging-linux-x86.tar.gz"
-WINE_FILENAME=$(echo ${WINE_URL} | cut -d/ -f8)
+# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (the WoW64 installation):
+WINE64_APPIMAGE_URL="https://github.com/ferion11/wine_WoW64_nodeps_AppImage/releases/download/v5.11/wine-staging-linux-amd64-nodeps-v5.11-PlayOnLinux-x86_64.AppImage"
+WINE64_APPIMAGE_FILENAME="$(echo "${WINE64_APPIMAGE_URL}" | cut -d/ -f9)"
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
@@ -15,25 +15,26 @@ printscreen() {
 	PRINT_NUM=$((PRINT_NUM+1))
 }
 
-wine_playonlinux() {
-	echo "* Download and install wine from another source:"
-	wget -q "${WINE_URL}" || die "Can't download the: ${WINE_URL}"
+wine_AppImage() {
+	echo "* Download and install wine AppImage from another source:"
+	wget -q "${WINE64_APPIMAGE_URL}" || die "Can't download the: ${WINE64_APPIMAGE_URL}"
+	chmod +x "${WINE64_APPIMAGE_FILENAME}"
+	mv "${WINE64_APPIMAGE_FILENAME}" "${HOME}"/
 
-	export WINEINSTALLATION="$HOME/wine_installation"
+	export WINEINSTALLATION="$HOME/bin"
 	mkdir "${WINEINSTALLATION}"
-	tar xf "${WINE_FILENAME}" -C "${WINEINSTALLATION}"/ || die "Can't extract the: ${WINE_FILENAME}"
+
+	ln -s "${WINE64_APPIMAGE_FILENAME}" wine
+	ln -s "${WINE64_APPIMAGE_FILENAME}" wine64
+	ln -s "${WINE64_APPIMAGE_FILENAME}" wineserver
+
+	mv wine "${WINEINSTALLATION}"/
+	mv wine64 "${WINEINSTALLATION}"/
+	mv wineserver "${WINEINSTALLATION}"/
 
 	#-------
 	# the installation replace:
-	export PATH="${WINEINSTALLATION}/bin:${PATH}"
-	export LD_LIBRARY_PATH="${WINEINSTALLATION}/lib":"${WINEINSTALLATION}/lib64":"${LD_LIBRARY_PATH}"
-
-	export WINELOADER="${WINEINSTALLATION}/bin/wine"
-	export WINEPATH="${WINEINSTALLATION}/bin":"${WINEINSTALLATION}/lib/wine":"${WINEINSTALLATION}/lib64/wine":"$WINEPATH"
-	export WINEDLLPATH="${WINEINSTALLATION}/lib/wine/fakedlls":"${WINEINSTALLATION}/lib64/wine/fakedlls":"$WINEDLLPATH"
-
-#	export WINE="${WINEINSTALLATION}/bin/wine64"
-#	export WINESERVER="${WINEINSTALLATION}/bin/wineserver"
+	export PATH="${WINEINSTALLATION}:${PATH}"
 }
 
 close_wine_mono_init_windows() {
@@ -73,35 +74,55 @@ REGEDIT4
 "DirectDrawRenderer"="gdi"
 "renderer"="gdi"
 EOF
+	#-------
 
 	echo "* Running: wine64 regedit.exe disable-winemenubuilder.reg"
 	wine64 regedit.exe disable-winemenubuilder.reg
+
+	echo "* ... wine64 regedit.exe to finish ..."
+	wineserver -w
+	#-------
 
 	echo "* Running: wine64 regedit.exe renderer_gdi.reg"
 	wine64 regedit.exe renderer_gdi.reg
 
 	echo "* ... wine64 regedit.exe to finish ..."
 	wineserver -w
+	#-------
 }
 
 install_packages_from_winetricks() {
 	#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	wget -c https://github.com/ferion11/libsutil/releases/download/winetricks/winetricks
 	chmod +x ./winetricks
+	#-------
 
 	echo "* starting winetricks -q corefonts ..."
 	./winetricks -q corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
 
+	echo "* ... waiting winetricks to finish ..."
+	wineserver -w
+	#-------
+
 	echo "* starting winetricks -q settings fontsmooth=rgb ..."
 	./winetricks -q settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
 
+	echo "* ... waiting winetricks to finish ..."
+	wineserver -w
+	#-------
+
 	echo "* starting winetricks -q dotnet48 ..."
 	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
+
+	echo "* ... waiting winetricks to finish ..."
+	wineserver -w
+	#-------
 }
 
 #===========================================================================================
-#echo "using the wine from playonlinux: "
-#wine_playonlinux
+echo "* using the wine from wine_AppImage: "
+wine_AppImage
+
 export WORKDIR="${PWD}"
 export WINE64_BOTTLE_NAME="wine64_bottle"
 export WINE64_BOTTLE="${WORKDIR}/${WINE64_BOTTLE_NAME}"
@@ -136,10 +157,6 @@ wineserver -w
 
 set_wine_regedit_keys
 install_packages_from_winetricks
-
-
-echo "* ... waiting winetricks to finish ..."
-wineserver -w
 #-----------------------
 
 echo "* Compressing and copying the results: ..."

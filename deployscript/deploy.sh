@@ -102,14 +102,13 @@ install_packages_from_winetricks() {
 #===========================================================================================
 #echo "using the wine from playonlinux: "
 #wine_playonlinux
-
+export WORKDIR="${PWD}"
 export WINE64_BOTTLE_NAME="wine64_bottle"
-export WINE64_BOTTLE="${HOME}/${WINE64_BOTTLE_NAME}"
+export WINE64_BOTTLE="${WORKDIR}/${WINE64_BOTTLE_NAME}"
 
 #export WINEARCH=win32
 export WINEARCH=win64
 export WINEPREFIX="${WINE64_BOTTLE}"
-
 #--------------
 
 echo "* wine64 --version:"
@@ -142,7 +141,6 @@ install_packages_from_winetricks
 echo "* ... waiting winetricks to finish ..."
 wineserver -w
 #-----------------------
-
 
 echo "* Compressing and copying the results: ..."
 

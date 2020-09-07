@@ -164,5 +164,5 @@ echo "* Compressing and copying the results: ..."
 tar czf wine64_bottle.tar.gz "${WINE64_BOTTLE_NAME}"
 mv wine64_bottle.tar.gz ./result/
 
-tar cvzf screenshots.tar.gz ./screenshot*
-mv screenshots.tar.gz ./result/
+#tar cvzf screenshots.tar.gz ./screenshot*
+#mv screenshots.tar.gz ./result/

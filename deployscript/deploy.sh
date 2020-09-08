@@ -6,6 +6,10 @@ export DISPLAY=:99.0
 WINE64_APPIMAGE_URL="https://github.com/ferion11/wine_WoW64_nodeps_AppImage/releases/download/v5.11/wine-staging-linux-amd64-nodeps-v5.11-PlayOnLinux-x86_64.AppImage"
 WINE64_APPIMAGE_FILENAME="$(echo "${WINE64_APPIMAGE_URL}" | cut -d/ -f9)"
 
+export WORKDIR="${PWD}"
+export WINE64_BOTTLE_NAME="wine64_bottle"
+export WINE64_BOTTLE="${WORKDIR}/${WINE64_BOTTLE_NAME}"
+
 #=========================
 die() { echo >&2 "$*"; exit 1; };
 
@@ -91,6 +95,36 @@ EOF
 	#-------
 }
 
+# wait to all process that is using the ${1} directory to finish
+wait_process_using_dir() {
+	VERIFICATION_DIR="${1}"
+	VERIFICATION_TIME=7
+	VERIFICATION_NUM=3
+
+	echo "* Starting wait_process_using_dir..."
+	i=0 ; while true; do
+		i=$((i+1))
+		echo "-------"
+		echo "wait_process_using_dir: loop with i=${i}"
+
+		echo "wait_process_using_dir: sleep ${VERIFICATION_TIME}"
+		sleep "${VERIFICATION_TIME}"
+
+		FIST_PID="$(lsof -t "${VERIFICATION_DIR}" | head -n 1)"
+		echo "wait_process_using_dir FIST_PID: ${FIST_PID}"
+		if [ -n "${FIST_PID}" ]; then
+			i=0
+			echo "wait_process_using_dir: tail --pid=${FIST_PID} -f /dev/null"
+			tail --pid="${FIST_PID}" -f /dev/null
+			continue
+		fi
+
+		echo "-------"
+		[ "${i}" -lt "${VERIFICATION_NUM}" ] || break
+	done
+	echo "* End of wait_process_using_dir."
+}
+
 install_packages_from_winetricks() {
 	#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	wget -c https://github.com/ferion11/libsutil/releases/download/winetricks/winetricks
@@ -101,6 +135,7 @@ install_packages_from_winetricks() {
 	./winetricks -q corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
+	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 
@@ -108,6 +143,7 @@ install_packages_from_winetricks() {
 	./winetricks -q settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
+	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 
@@ -115,6 +151,7 @@ install_packages_from_winetricks() {
 	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
+	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 }
@@ -122,10 +159,6 @@ install_packages_from_winetricks() {
 #===========================================================================================
 echo "* using the wine from wine_AppImage: "
 wine_AppImage
-
-export WORKDIR="${PWD}"
-export WINE64_BOTTLE_NAME="wine64_bottle"
-export WINE64_BOTTLE="${WORKDIR}/${WINE64_BOTTLE_NAME}"
 
 #export WINEARCH=win32
 export WINEARCH=win64

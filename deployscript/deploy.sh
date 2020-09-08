@@ -2,9 +2,9 @@
 # user mod with sudo acess: $HOME is /home/travis
 # travis use DISPLAY=:99.0 to xvfb
 export DISPLAY=:99.0
-# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here (the WoW64 installation):
-WINE64_APPIMAGE_URL="https://github.com/ferion11/wine_WoW64_nodeps_AppImage/releases/download/v5.11/wine-staging-linux-amd64-nodeps-v5.11-PlayOnLinux-x86_64.AppImage"
-WINE64_APPIMAGE_FILENAME="$(echo "${WINE64_APPIMAGE_URL}" | cut -d/ -f9)"
+# the wine 5.11 is the last that work to install dotnet48 on the 32bits, so trying it here:
+WINE_APPIMAGE_URL="https://github.com/ferion11/Wine_Appimage/releases/download/continuous-logos/wine-staging-linux-x86-v5.11-f11-x86_64.AppImage"
+WINE_APPIMAGE_FILENAME="$(echo "${WINE_APPIMAGE_URL}" | cut -d/ -f9)"
 
 #=========================
 die() { echo >&2 "$*"; exit 1; };
@@ -17,19 +17,17 @@ printscreen() {
 
 wine_AppImage() {
 	echo "* Download and install wine AppImage from another source:"
-	wget -q "${WINE64_APPIMAGE_URL}" || die "Can't download the: ${WINE64_APPIMAGE_URL}"
-	chmod +x "${WINE64_APPIMAGE_FILENAME}"
-	mv "${WINE64_APPIMAGE_FILENAME}" "${HOME}"/
+	wget -q "${WINE_APPIMAGE_URL}" || die "Can't download the: ${WINE_APPIMAGE_URL}"
+	chmod +x "${WINE_APPIMAGE_FILENAME}"
+	mv "${WINE_APPIMAGE_FILENAME}" "${HOME}"/
 
 	export WINEINSTALLATION="$HOME/bin"
 	mkdir "${WINEINSTALLATION}"
 
-	ln -s "${WINE64_APPIMAGE_FILENAME}" wine
-	ln -s "${WINE64_APPIMAGE_FILENAME}" wine64
-	ln -s "${WINE64_APPIMAGE_FILENAME}" wineserver
+	ln -s "${WINE_APPIMAGE_FILENAME}" wine
+	ln -s "${WINE_APPIMAGE_FILENAME}" wineserver
 
 	mv wine "${WINEINSTALLATION}"/
-	mv wine64 "${WINEINSTALLATION}"/
 	mv wineserver "${WINEINSTALLATION}"/
 
 	#-------
@@ -76,17 +74,17 @@ REGEDIT4
 EOF
 	#-------
 
-	echo "* Running: wine64 regedit.exe disable-winemenubuilder.reg"
-	wine64 regedit.exe disable-winemenubuilder.reg
+	echo "* Running: wine regedit.exe disable-winemenubuilder.reg"
+	wine regedit.exe disable-winemenubuilder.reg
 
-	echo "* ... wine64 regedit.exe to finish ..."
+	echo "* ... wine regedit.exe to finish ..."
 	wineserver -w
 	#-------
 
-	echo "* Running: wine64 regedit.exe renderer_gdi.reg"
-	wine64 regedit.exe renderer_gdi.reg
+	echo "* Running: wine regedit.exe renderer_gdi.reg"
+	wine regedit.exe renderer_gdi.reg
 
-	echo "* ... wine64 regedit.exe to finish ..."
+	echo "* ... wine regedit.exe to finish ..."
 	wineserver -w
 	#-------
 }
@@ -124,19 +122,19 @@ echo "* using the wine from wine_AppImage: "
 wine_AppImage
 
 export WORKDIR="${PWD}"
-export WINE64_BOTTLE_NAME="wine64_bottle"
-export WINE64_BOTTLE="${WORKDIR}/${WINE64_BOTTLE_NAME}"
+export WINE32_BOTTLE_NAME="wine32_bottle"
+export WINE32_BOTTLE="${WORKDIR}/${WINE32_BOTTLE_NAME}"
 
-#export WINEARCH=win32
-export WINEARCH=win64
-export WINEPREFIX="${WINE64_BOTTLE}"
+export WINEARCH=win32
+#export WINEARCH=win64
+export WINEPREFIX="${WINE32_BOTTLE}"
 #--------------
 
-echo "* wine64 --version:"
-wine64 --version
+echo "* wine --version:"
+wine --version
 
 echo "* creating bottle ..."
-wine64 wineboot &
+wine wineboot &
 echo "* Waiting to initialize wine..."
 
 # 2 times, one for 32bit and another for 64bit:
@@ -146,11 +144,12 @@ close_wine_mono_init_windows
 echo "* wine gecko cancel"
 close_wine_gecko_init_windows
 
+#sleep 7
 #echo "* wine mono cancel part2:"
 #close_wine_mono_init_windows
 
-echo "* wine gecko cancel part2:"
-close_wine_gecko_init_windows
+#echo "* wine gecko cancel part2:"
+#close_wine_gecko_init_windows
 
 echo "* ... waiting wineboot to finish ..."
 wineserver -w
@@ -161,8 +160,8 @@ install_packages_from_winetricks
 
 echo "* Compressing and copying the results: ..."
 
-tar czf wine64_bottle.tar.gz "${WINE64_BOTTLE_NAME}"
-mv wine64_bottle.tar.gz ./result/
+tar czf wine32_bottle.tar.gz "${WINE32_BOTTLE_NAME}"
+mv wine32_bottle.tar.gz ./result/
 
 #tar cvzf screenshots.tar.gz ./screenshot*
 #mv screenshots.tar.gz ./result/

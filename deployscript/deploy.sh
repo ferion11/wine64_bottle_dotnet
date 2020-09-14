@@ -213,36 +213,6 @@ EOF
 	#-------
 }
 
-# wait to all process that is using the ${1} directory to finish
-wait_process_using_dir() {
-	VERIFICATION_DIR="${1}"
-	VERIFICATION_TIME=7
-	VERIFICATION_NUM=3
-
-	echo "* Starting wait_process_using_dir..."
-	i=0 ; while true; do
-		i=$((i+1))
-		echo "-------"
-		echo "wait_process_using_dir: loop with i=${i}"
-
-		echo "wait_process_using_dir: sleep ${VERIFICATION_TIME}"
-		sleep "${VERIFICATION_TIME}"
-
-		FIST_PID="$(lsof -t "${VERIFICATION_DIR}" | head -n 1)"
-		echo "wait_process_using_dir FIST_PID: ${FIST_PID}"
-		if [ -n "${FIST_PID}" ]; then
-			i=0
-			echo "wait_process_using_dir: tail --pid=${FIST_PID} -f /dev/null"
-			tail --pid="${FIST_PID}" -f /dev/null
-			continue
-		fi
-
-		echo "-------"
-		[ "${i}" -lt "${VERIFICATION_NUM}" ] || break
-	done
-	echo "* End of wait_process_using_dir."
-}
-
 install_dotnet48_from_winetricks() {
 	echo "* starting winetricks -q dotnet48 ..."
 	./winetricks dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
@@ -261,7 +231,6 @@ install_packages_from_winetricks() {
 	./winetricks corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
-	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 
@@ -269,7 +238,6 @@ install_packages_from_winetricks() {
 	./winetricks settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
-	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 

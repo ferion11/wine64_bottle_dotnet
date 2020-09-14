@@ -20,7 +20,7 @@ printscreen() {
 }
 
 wine_AppImage() {
-	export WINEINSTALLATION="$HOME/bin"
+	export WINEINSTALLATION="${WORKDIR}/bin"
 	mkdir -p "${WINEINSTALLATION}"
 
 	echo "* Download and install wine AppImage from another source:"
@@ -73,9 +73,9 @@ dotnet48_install_window(){
 	sleep 7
 	while true; do
 		sleep "3"
-		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
-		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet4_start.png null: 2>&1)
-		rm current1.png
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current32.png
+		PIXELS_DIFF=$(compare -metric AE ./current32.png ./img/dotnet4_start.png null: 2>&1)
+		rm current32.png
 		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
 		[ "${PIXELS_DIFF}" -gt "20000" ] || break
 	done
@@ -104,9 +104,9 @@ dotnet48_install_window(){
 	sleep 120
 	while true; do
 		sleep "3"
-		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
-		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet4_end.png null: 2>&1)
-		rm current1.png
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current32.png
+		PIXELS_DIFF=$(compare -metric AE ./current32.png ./img/dotnet4_end.png null: 2>&1)
+		rm current32.png
 		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
 		[ "${PIXELS_DIFF}" -gt "20000" ] || break
 	done
@@ -157,9 +157,9 @@ dotnet48_install_window(){
 	sleep 120
 	while true; do
 		sleep "3"
-		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
-		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet48_end.png null: 2>&1)
-		rm current1.png
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current32.png
+		PIXELS_DIFF=$(compare -metric AE ./current32.png ./img/dotnet48_end.png null: 2>&1)
+		rm current32.png
 		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
 		[ "${PIXELS_DIFF}" -gt "20000" ] || break
 	done

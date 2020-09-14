@@ -313,6 +313,11 @@ set_wine_regedit_keys
 install_packages_from_winetricks
 
 echo "* ... waiting wineboot to finish ..."
+# dotnet40
+wait_process_using_dir "${WINE64_BOTTLE}"
+# dotnet48
+wait_process_using_dir "${WINE64_BOTTLE}"
+# dotnet leftover
 wait_process_using_dir "${WINE64_BOTTLE}"
 wineserver -w
 #-----------------------

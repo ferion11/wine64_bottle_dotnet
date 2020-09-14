@@ -6,6 +6,7 @@ addons:
     - xdotool
     - x11-apps
     - zenity
+    - imagemagick
 
 services:
   - xvfb

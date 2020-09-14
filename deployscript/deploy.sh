@@ -20,13 +20,14 @@ printscreen() {
 }
 
 wine_AppImage() {
+	export WINEINSTALLATION="$HOME/bin"
+	mkdir -p "${WINEINSTALLATION}"
+
 	echo "* Download and install wine AppImage from another source:"
 	wget -q "${WINE64_APPIMAGE_URL}" || die "Can't download the: ${WINE64_APPIMAGE_URL}"
-	chmod +x "${WINE64_APPIMAGE_FILENAME}"
-	mv "${WINE64_APPIMAGE_FILENAME}" "${HOME}"/
 
-	export WINEINSTALLATION="$HOME/bin"
-	mkdir "${WINEINSTALLATION}"
+	chmod +x "${WINE64_APPIMAGE_FILENAME}"
+	mv "${WINE64_APPIMAGE_FILENAME}" "${WINEINSTALLATION}"/
 
 	ln -s "${WINE64_APPIMAGE_FILENAME}" wine
 	ln -s "${WINE64_APPIMAGE_FILENAME}" wine64
@@ -63,6 +64,123 @@ close_wine_gecko_init_windows() {
 	sleep 1
 	xdotool key --window $WID --delay 1000 space
 	sleep 2
+}
+
+dotnet48_install_window(){
+	#-------
+	while ! WID=$(xdotool search --name "Extracting*"); do
+		sleep "1"
+	done
+	printscreen
+	sleep 7
+	while true; do
+		sleep "3"
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
+		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet4_start.png null: 2>&1)
+		rm current1.png
+		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
+		[ "${PIXELS_DIFF}" -gt "20000" ] || break
+	done
+	# printscreen to update the dotnet4_end.png
+	printscreen
+	echo "* Sending installer keystrokes..."
+	#-------
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	#select checkbox
+	xdotool key --delay 500 space
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
+	sleep 120
+	while true; do
+		sleep "3"
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
+		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet4_end.png null: 2>&1)
+		rm current1.png
+		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
+		[ "${PIXELS_DIFF}" -gt "20000" ] || break
+	done
+	# printscreen to update the dotnet4_end.png
+	printscreen
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
+	while ! WID=$(xdotool search --name "Extracting*"); do
+		sleep "1"
+	done
+	printscreen
+	sleep 7
+	while ! WID=$(xdotool search --name "Microsoft*"); do
+		sleep "1"
+	done
+	sleep 3
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
+	sleep 3
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	# select checkbox
+	xdotool key --delay 500 space
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
+	sleep 120
+	while true; do
+		sleep "3"
+		xwd -display $DISPLAY -root -silent | convert xwd:- png:./current1.png
+		PIXELS_DIFF=$(compare -metric AE ./current1.png ./img/dotnet48_end.png null: 2>&1)
+		rm current1.png
+		#using 20000 or more (because the diff is larger, like 145699, and we avoid font issues, that is around 5000 in 2-3 lines +3buttons changes)
+		[ "${PIXELS_DIFF}" -gt "20000" ] || break
+	done
+	# printscreen to update the dotnet48_end.png
+	printscreen
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
+	while ! WID=$(xdotool search --name "Microsoft*"); do
+		sleep "1"
+	done
+	sleep 3
+	xdotool key --delay 500 Tab
+	sleep "0.5"
+	printscreen
+	xdotool key --delay 500 space
+	#-------
 }
 
 set_wine_regedit_keys() {
@@ -125,6 +243,14 @@ wait_process_using_dir() {
 	echo "* End of wait_process_using_dir."
 }
 
+install_dotnet48_from_winetricks() {
+	echo "* starting winetricks -q dotnet48 ..."
+	./winetricks dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
+
+	echo "* ... waiting winetricks to finish ..."
+	wineserver -w
+}
+
 install_packages_from_winetricks() {
 	#wget -c https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks
 	wget -c https://github.com/ferion11/libsutil/releases/download/winetricks/winetricks
@@ -132,7 +258,7 @@ install_packages_from_winetricks() {
 	#-------
 
 	echo "* starting winetricks -q corefonts ..."
-	./winetricks -q corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
+	./winetricks corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
 	wait_process_using_dir "${WINE64_BOTTLE}"
@@ -140,19 +266,15 @@ install_packages_from_winetricks() {
 	#-------
 
 	echo "* starting winetricks -q settings fontsmooth=rgb ..."
-	./winetricks -q settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
+	./winetricks settings fontsmooth=rgb || die " !!!!!!! winetricks fail to install: settings fontsmooth=rgb !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
 	wait_process_using_dir "${WINE64_BOTTLE}"
 	wineserver -w
 	#-------
 
-	echo "* starting winetricks -q dotnet48 ..."
-	./winetricks -q dotnet48 || die " !!!!!!! winetricks fail to install dotnet48 !!!!!!!"
-
-	echo "* ... waiting winetricks to finish ..."
-	wait_process_using_dir "${WINE64_BOTTLE}"
-	wineserver -w
+	install_dotnet48_from_winetricks &
+	dotnet48_install_window
 	#-------
 }
 

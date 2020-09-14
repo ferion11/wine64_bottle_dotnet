@@ -277,8 +277,8 @@ install_packages_from_winetricks() {
 }
 
 #===========================================================================================
-echo "* using the wine from wine_AppImage: "
-wine_AppImage
+#echo "* using the wine from wine_AppImage: "
+#wine_AppImage
 
 #export WINEARCH=win32
 export WINEARCH=win64

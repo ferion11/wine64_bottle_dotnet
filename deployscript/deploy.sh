@@ -257,8 +257,9 @@ install_packages_from_winetricks() {
 	chmod +x ./winetricks
 	#-------
 
-	echo "* starting winetricks -q corefonts ..."
+	echo "* starting winetricks -q corefonts and tahoma ..."
 	./winetricks corefonts || die " !!!!!!! winetricks fail to install corefonts !!!!!!!"
+	./winetricks tahoma || die " !!!!!!! winetricks fail to install tahoma !!!!!!!"
 
 	echo "* ... waiting winetricks to finish ..."
 	wineserver -w
